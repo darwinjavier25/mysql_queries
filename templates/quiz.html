@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL DQL Quiz - Evaluación Teórica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .question-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: slideIn 0.5s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .option-card {
+            border: 2px solid #e9ecef;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .option-card:hover {
+            border-color: #007bff;
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        .option-card.selected {
+            border-color: #007bff;
+            background-color: #e3f2fd;
+        }
+        .option-card.correct {
+            border-color: #28a745;
+            background-color: #d4edda;
+        }
+        .option-card.incorrect {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+        }
+        .option-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #6c757d;
+            color: white;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        .option-card.selected .option-letter {
+            background-color: #007bff;
+        }
+        .option-card.correct .option-letter {
+            background-color: #28a745;
+        }
+        .option-card.incorrect .option-letter {
+            background-color: #dc3545;
+        }
+        .level-badge {
+            font-size: 0.8rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        .progress-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .result-animation {
+            animation: bounce 0.6s ease;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        .quiz-complete {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-radius: 1rem;
+            margin-top: 2rem;
+        }
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffc107;
+        }
+        .explanation-card {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-database me-2"></i>MySQL Query Executor
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">
+                    <i class="fas fa-home me-1"></i>Consulta SQL
+                </a>
+                <a class="nav-link" href="/tests">
+                    <i class="fas fa-code me-1"></i>Tests Prácticos
+                </a>
+                <a class="nav-link active" href="/quiz">
+                    <i class="fas fa-brain me-1"></i>Quiz Teórico
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container mt-4">
+        <div class="quiz-container">
+            <!-- Header con progreso -->
+            <div class="progress-section">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="mb-2">
+                            <i class="fas fa-brain me-2"></i>
+                            Quiz Teórico de SQL DQL
+                        </h2>
+                        <p class="mb-0">Evalúa tus conocimientos teóricos de SQL con preguntas de opción múltiple.</p>
+                        
+                        <!-- Selector de Quiz -->
+                        <div class="mt-3">
+                            <label for="quizSelector" class="form-label text-white">
+                                <i class="fas fa-list me-1"></i>Seleccionar Quiz:
+                            </label>
+                            <select class="form-select" id="quizSelector" style="max-width: 300px;">
+                                <option value="">Cargando quizzes...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="timer" id="timer">
+                            <i class="fas fa-clock me-1"></i>
+                            <span id="timeDisplay">00:00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4 id="currentQuestion">1</h4>
+                        <small>Pregunta Actual</small>
+                    </div>
+                    <div class="stat-card">
+                        <h4 id="correctCount">0</h4>
+                        <small>Correctas</small>
+                    </div>
+                    <div class="stat-card">
+                        <h4 id="incorrectCount">0</h4>
+                        <small>Incorrectas</small>
+                    </div>
+                    <div class="stat-card">
+                        <h4 id="progressPercent">0%</h4>
+                        <small>Progreso</small>
+                    </div>
+                </div>
+                
+                <!-- Barra de progreso -->
+                <div class="progress mt-3" style="height: 8px;">
+                    <div class="progress-bar bg-warning" id="progressBar" role="progressbar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Contenedor de preguntas -->
+            <div id="quizContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando quiz...</span>
+                    </div>
+                    <p class="mt-2">Cargando preguntas del quiz...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        let selectedAnswer = null;
+        let quizStartTime = Date.now();
+        let timerInterval;
+        let quizCompleted = false;
+        let currentQuizNumber = 6; // Por defecto
+        let availableQuizzes = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQuizzes();
+            startTimer();
+        });
+
+        async function loadQuizzes() {
+            try {
+                const response = await fetch('/api/list-quizzes');
+                const data = await response.json();
+                
+                if (data.success) {
+                    availableQuizzes = data.quizzes;
+                    populateQuizSelector();
+                    
+                    // Obtener el número de quiz de la URL o usar el por defecto
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const quizFromUrl = urlParams.get('quiz_number');
+                    if (quizFromUrl) {
+                        currentQuizNumber = parseInt(quizFromUrl);
+                    }
+                    
+                    // Seleccionar el quiz actual en el selector
+                    document.getElementById('quizSelector').value = currentQuizNumber;
+                    
+                    // Cargar el quiz
+                    loadQuiz();
+                } else {
+                    showAlert('Error al cargar la lista de quizzes: ' + data.error, 'danger');
+                }
+            } catch (error) {
+                showAlert('Error de conexión: ' + error.message, 'danger');
+            }
+        }
+
+        function populateQuizSelector() {
+            const selector = document.getElementById('quizSelector');
+            selector.innerHTML = '';
+            
+            availableQuizzes.forEach(quiz => {
+                const option = document.createElement('option');
+                option.value = quiz.number;
+                option.textContent = `Quiz ${quiz.number} - ${quiz.filename}`;
+                selector.appendChild(option);
+            });
+            
+            // Añadir evento change
+            selector.addEventListener('change', function() {
+                currentQuizNumber = parseInt(this.value);
+                resetQuiz();
+                loadQuiz();
+                
+                // Actualizar URL sin recargar la página
+                const url = new URL(window.location);
+                if (currentQuizNumber === 6) {
+                    url.searchParams.delete('quiz_number');
+                } else {
+                    url.searchParams.set('quiz_number', currentQuizNumber);
+                }
+                window.history.replaceState({}, '', url);
+            });
+        }
+
+        async function loadQuiz() {
+            try {
+                const response = await fetch(`/api/load-quiz?quiz_number=${currentQuizNumber}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    questions = data.questions;
+                    // Mezclar preguntas para variedad
+                    questions = shuffleArray(questions);
+                    displayQuestion();
+                } else {
+                    showAlert('Error al cargar el quiz: ' + data.error, 'danger');
+                }
+            } catch (error) {
+                showAlert('Error de conexión: ' + error.message, 'danger');
+            }
+        }
+
+        function displayQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showQuizComplete();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            const container = document.getElementById('quizContent');
+            
+            const levelColor = {
+                'básico': 'success',
+                'intermedio': 'warning', 
+                'avanzado': 'danger',
+                'experto': 'dark'
+            }[question.level];
+
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-${levelColor} level-badge">
+                            <i class="fas fa-signal me-1"></i>${question.level.charAt(0).toUpperCase() + question.level.slice(1)}
+                        </span>
+                        <span class="text-muted">
+                            Pregunta ${currentQuestionIndex + 1} de ${questions.length}
+                        </span>
+                    </div>
+                    
+                    <h5 class="mb-4">
+                        <i class="fas fa-question-circle me-2 text-primary"></i>
+                        ${question.question}
+                    </h5>
+                    
+                    <div class="options-container">
+                        ${question.options.map((option, index) => `
+                            <div class="option-card" onclick="selectOption('${option.letter}', this)" data-letter="${option.letter}">
+                                <div class="d-flex align-items-center">
+                                    <span class="option-letter">${option.letter}</span>
+                                    <div class="flex-grow-1">
+                                        ${option.text}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="mt-4 d-flex justify-content-between">
+                        <button class="btn btn-outline-secondary" onclick="previousQuestion()" ${currentQuestionIndex === 0 ? 'disabled' : ''}>
+                            <i class="fas fa-arrow-left me-1"></i>Anterior
+                        </button>
+                        <button class="btn btn-primary" onclick="submitAnswer()" id="submitBtn" disabled>
+                            <i class="fas fa-check me-1"></i>Responder
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            updateStats();
+        }
+
+        function selectOption(letter, element) {
+            // Limpiar selección anterior
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Marcar nueva selección
+            element.classList.add('selected');
+            selectedAnswer = letter;
+            
+            // Habilitar botón de responder
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        async function submitAnswer() {
+            if (!selectedAnswer) {
+                showAlert('Por favor, selecciona una respuesta', 'warning');
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            
+            try {
+                const response = await fetch('/api/validate-quiz-answer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        question_id: question.id,
+                        user_answer: selectedAnswer,
+                        quiz_number: currentQuizNumber
+                    })
+                });
+
+                const data = await response.json();
+                displayAnswerResult(data);
+                
+            } catch (error) {
+                showAlert('Error al validar la respuesta: ' + error.message, 'danger');
+            }
+        }
+
+        function displayAnswerResult(data) {
+            const isCorrect = data.is_correct;
+            
+            // Actualizar contadores
+            if (isCorrect) {
+                correctAnswers++;
+            } else {
+                incorrectAnswers++;
+            }
+            
+            // Marcar opciones
+            document.querySelectorAll('.option-card').forEach(card => {
+                const letter = card.dataset.letter;
+                card.classList.remove('selected');
+                
+                if (letter === data.correct_answer) {
+                    card.classList.add('correct');
+                } else if (letter === data.user_answer && !isCorrect) {
+                    card.classList.add('incorrect');
+                }
+                
+                // Deshabilitar clics
+                card.style.cursor = 'default';
+                card.onclick = null;
+            });
+            
+            // Mostrar explicación con teoría y fuentes
+            let explanationHtml = `
+                <div class="explanation-card result-animation">
+                    <h6>
+                        <i class="fas fa-${isCorrect ? 'check-circle text-success' : 'times-circle text-danger'} me-2"></i>
+                        ${isCorrect ? '¡Correcto!' : 'Incorrecto'}
+                    </h6>
+                    <p class="mb-1">
+                        <strong>Respuesta correcta:</strong> ${data.correct_answer}
+                    </p>
+                    ${!isCorrect ? `<p class="mb-2"><strong>Tu respuesta:</strong> ${data.user_answer}</p>` : ''}
+            `;
+            
+            // Añadir teoría si existe
+            if (data.theory) {
+                explanationHtml += `
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <h6 class="text-primary mb-2">
+                            <i class="fas fa-book me-1"></i>Teoría
+                        </h6>
+                        <p class="mb-0">${data.theory}</p>
+                    </div>
+                `;
+            }
+            
+            // Añadir fuentes si existen
+            if (data.sources && data.sources.length > 0) {
+                explanationHtml += `
+                    <div class="mt-3">
+                        <h6 class="text-info mb-2">
+                            <i class="fas fa-external-link-alt me-1"></i>Fuentes para aprender más
+                        </h6>
+                        <div class="d-flex flex-wrap gap-2">
+                `;
+                
+                data.sources.forEach((source, index) => {
+                    const sourceName = getSourceName(source);
+                    explanationHtml += `
+                        <a href="${source}" target="_blank" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-link me-1"></i>${sourceName}
+                        </a>
+                    `;
+                });
+                
+                explanationHtml += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            explanationHtml += '</div>';
+            
+            document.querySelector('.options-container').insertAdjacentHTML('afterend', explanationHtml);
+            
+            // Actualizar botones
+            document.getElementById('submitBtn').style.display = 'none';
+            
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'btn btn-success';
+            nextBtn.innerHTML = '<i class="fas fa-arrow-right me-1"></i>Siguiente';
+            nextBtn.onclick = nextQuestion;
+            
+            document.querySelector('.mt-4.d-flex').appendChild(nextBtn);
+            
+            updateStats();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            selectedAnswer = null;
+            displayQuestion();
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                selectedAnswer = null;
+                displayQuestion();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('incorrectCount').textContent = incorrectAnswers;
+            
+            const progress = Math.round(((currentQuestionIndex + 1) / questions.length) * 100);
+            document.getElementById('progressPercent').textContent = progress + '%';
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function showQuizComplete() {
+            quizCompleted = true;
+            clearInterval(timerInterval);
+            
+            const totalTime = Math.floor((Date.now() - quizStartTime) / 1000);
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+            
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            const message = percentage >= 80 ? '¡Excelente!' : percentage >= 60 ? '¡Buen trabajo!' : 'Sigue practicando';
+            
+            const container = document.getElementById('quizContent');
+            container.innerHTML = `
+                <div class="quiz-complete result-animation">
+                    <i class="fas fa-trophy fa-4x mb-3"></i>
+                    <h2>${message}</h2>
+                    <h3>Has completado el quiz</h3>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-3">
+                            <h4>${correctAnswers}/${questions.length}</h4>
+                            <small>Respuestas Correctas</small>
+                        </div>
+                        <div class="col-md-3">
+                            <h4>${percentage}%</h4>
+                            <small>Puntuación</small>
+                        </div>
+                        <div class="col-md-3">
+                            <h4>${minutes}:${seconds.toString().padStart(2, '0')}</h4>
+                            <small>Tiempo Total</small>
+                        </div>
+                        <div class="col-md-3">
+                            <h4>${getGrade(percentage)}</h4>
+                            <small>Calificación</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button class="btn btn-light btn-lg me-2" onclick="restartQuiz()">
+                            <i class="fas fa-redo me-1"></i>Reiniciar Quiz
+                        </button>
+                        <a href="/tests" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-code me-1"></i>Ir a Tests Prácticos
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getGrade(percentage) {
+            if (percentage >= 90) return 'A+';
+            if (percentage >= 80) return 'A';
+            if (percentage >= 70) return 'B';
+            if (percentage >= 60) return 'C';
+            if (percentage >= 50) return 'D';
+            return 'F';
+        }
+
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            selectedAnswer = null;
+            quizStartTime = Date.now();
+            quizCompleted = false;
+            
+            clearInterval(timerInterval);
+            startTimer();
+        }
+
+        function restartQuiz() {
+            resetQuiz();
+            
+            // Mezclar preguntas nuevamente
+            questions = shuffleArray(questions);
+            displayQuestion();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (!quizCompleted) {
+                    const elapsed = Math.floor((Date.now() - quizStartTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = elapsed % 60;
+                    document.getElementById('timeDisplay').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function getSourceName(url) {
+            // Extraer nombre legible de la URL
+            if (url.includes('w3schools.com')) return 'W3Schools';
+            if (url.includes('dev.mysql.com')) return 'MySQL Docs';
+            if (url.includes('postgresql.org')) return 'PostgreSQL Docs';
+            if (url.includes('oracle.com')) return 'Oracle Docs';
+            if (url.includes('microsoft.com')) return 'Microsoft Docs';
+            if (url.includes('geeksforgeeks.org')) return 'GeeksforGeeks';
+            return 'Documentation';
+        }
+
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

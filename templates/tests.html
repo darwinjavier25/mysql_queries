@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL DQL Tests - Aprendizaje Interactivo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .test-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .test-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .level-basico { border-left-color: #28a745; }
+        .level-intermedio { border-left-color: #ffc107; }
+        .level-avanzado { border-left-color: #fd7e14; }
+        .level-desafio { border-left-color: #dc3545; }
+        .level-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        .CodeMirror {
+            height: 150px;
+            border-radius: 0.375rem;
+            font-size: 14px;
+        }
+        .result-card {
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .correct-answer {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .wrong-answer {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            stroke: #fff;
+            stroke-dasharray: 339.292;
+            stroke-dashoffset: 339.292;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-database me-2"></i>MySQL Query Executor
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">
+                    <i class="fas fa-home me-1"></i>Consulta SQL
+                </a>
+                <a class="nav-link active" href="/tests">
+                    <i class="fas fa-graduation-cap me-1"></i>Tests DQL
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container mt-4">
+        <!-- Header con estadísticas -->
+        <div class="stats-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="mb-3">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Tests Interactivos de SQL DQL
+                    </h2>
+                    <p class="mb-0">Pon a prueba tus conocimientos de SQL con ejercicios progresivos. 
+                    Desde consultas básicas hasta operaciones avanzadas.</p>
+                    
+                    <!-- Selector de Tests -->
+                    <div class="mt-3">
+                        <label for="testSelector" class="form-label">
+                            <i class="fas fa-list me-1"></i>Seleccionar Test:
+                        </label>
+                        <select class="form-select" id="testSelector" style="max-width: 300px;">
+                            <option value="">Cargando tests...</option>
+                        </select>
+                        <div id="currentTestInfo" class="mt-2"></div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <svg width="120" height="120" class="progress-ring">
+                        <circle class="progress-ring-circle" 
+                                stroke-width="8" 
+                                fill="transparent" 
+                                r="54" 
+                                cx="60" 
+                                cy="60"
+                                id="progressCircle"/>
+                    </svg>
+                    <div class="mt-2">
+                        <h4 id="scoreText">0%</h4>
+                        <small>Progreso</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros de nivel -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary active" onclick="filterTests('all')">
+                        <i class="fas fa-list me-1"></i>Todos (20)
+                    </button>
+                    <button type="button" class="btn btn-outline-success" onclick="filterTests('básico')">
+                        <i class="fas fa-star me-1"></i>Básico (5)
+                    </button>
+                    <button type="button" class="btn btn-outline-warning" onclick="filterTests('intermedio')">
+                        <i class="fas fa-fire me-1"></i>Intermedio (5)
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" onclick="filterTests('avanzado')">
+                        <i class="fas fa-rocket me-1"></i>Avanzado (5)
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" onclick="filterTests('desafío')">
+                        <i class="fas fa-trophy me-1"></i>Desafío (5)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Tests -->
+        <div class="row" id="testsContainer">
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando tests...</span>
+                </div>
+                <p class="mt-2">Cargando tests interactivos...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Test -->
+    <div class="modal fade" id="testModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-question-circle me-2"></i>
+                        <span id="modalTitle">Test</span>
+                        <span id="modalLevel" class="badge level-badge ms-2"></span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <h6 id="questionText" class="text-primary"></h6>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="answerEditor" class="form-label">
+                            <i class="fas fa-code me-1"></i>Escribe tu consulta SQL:
+                        </label>
+                        <textarea id="answerEditor" class="form-control" placeholder="SELECT * FROM tabla WHERE condición;"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <button class="btn btn-primary" onclick="checkAnswer()">
+                            <i class="fas fa-check me-1"></i>Verificar Respuesta
+                        </button>
+                        <button class="btn btn-outline-secondary ms-2" onclick="showHint()">
+                            <i class="fas fa-lightbulb me-1"></i>Pista
+                        </button>
+                        <button class="btn btn-outline-info ms-2" onclick="showCorrectAnswer()">
+                            <i class="fas fa-eye me-1"></i>Ver Respuesta
+                        </button>
+                        <button class="btn btn-outline-success ms-2" onclick="executeQuery()">
+                            <i class="fas fa-play me-1"></i>Lanzar Query
+                        </button>
+                    </div>
+
+                    <!-- Resultados -->
+                    <div id="resultContainer"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="nextTest()" id="nextBtn" style="display: none;">
+                        Siguiente <i class="fas fa-arrow-right ms-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script>
+    
+    <script>
+        let tests = [];
+        let availableTests = [];
+        let currentTestNumber = 1;
+        let currentFilter = 'all';
+        let answeredTests = new Set();
+        let correctAnswers = 0;
+        let answerEditor;
+        let testModal;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            testModal = new bootstrap.Modal(document.getElementById('testModal'));
+            
+            // Inicializar CodeMirror
+            answerEditor = CodeMirror.fromTextArea(document.getElementById('answerEditor'), {
+                mode: 'text/x-sql',
+                theme: 'monokai',
+                lineNumbers: true,
+                autoCloseBrackets: true,
+                matchBrackets: true,
+                indentWithTabs: false,
+                smartIndent: true,
+                lineWrapping: true
+            });
+
+            loadTests();
+        });
+
+        async function loadTests() {
+            try {
+                // Primero cargar la lista de tests disponibles
+                const listResponse = await fetch('/api/list-tests');
+                const listData = await listResponse.json();
+                
+                if (!listData.success) {
+                    showAlert('Error al cargar la lista de tests: ' + listData.error, 'danger');
+                    return;
+                }
+                
+                availableTests = listData.tests;
+                populateTestSelector();
+                
+                // Cargar el primer test por defecto o el seleccionado
+                const testNumber = getCurrentTestNumber() || (availableTests.length > 0 ? availableTests[0].number : '1');
+                loadSpecificTest(testNumber);
+                
+            } catch (error) {
+                showAlert('Error de conexión: ' + error.message, 'danger');
+            }
+        }
+
+        function populateTestSelector() {
+            const selector = document.getElementById('testSelector');
+            if (!selector) return;
+            
+            selector.innerHTML = '';
+            
+            availableTests.forEach(test => {
+                const option = document.createElement('option');
+                option.value = test.number;
+                option.textContent = `Test DQL ${test.number} - ${test.filename}`;
+                selector.appendChild(option);
+            });
+            
+            // Añadir evento change
+            selector.addEventListener('change', function() {
+                const testNumber = this.value;
+                loadSpecificTest(testNumber);
+                
+                // Actualizar URL
+                const url = new URL(window.location);
+                if (testNumber === '1') {
+                    url.searchParams.delete('test_number');
+                } else {
+                    url.searchParams.set('test_number', testNumber);
+                }
+                window.history.replaceState({}, '', url);
+            });
+        }
+
+        function getCurrentTestNumber() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('test_number');
+        }
+
+        async function loadSpecificTest(testNumber) {
+            try {
+                const response = await fetch(`/api/load-tests?test_number=${testNumber}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    tests = data.questions;
+                    currentTestNumber = data.test_number;
+                    renderTests();
+                    updateTestInfo();
+                } else {
+                    showAlert('Error al cargar los tests: ' + data.error, 'danger');
+                }
+            } catch (error) {
+                showAlert('Error de conexión: ' + error.message, 'danger');
+            }
+        }
+
+        function updateTestInfo() {
+            const infoElement = document.getElementById('currentTestInfo');
+            if (infoElement && availableTests.length > 0) {
+                const currentTest = availableTests.find(t => t.number == currentTestNumber);
+                if (currentTest) {
+                    infoElement.innerHTML = `
+                        <span class="badge bg-primary">Test DQL ${currentTest.number}</span>
+                        <span class="text-muted">${currentTest.filename}</span>
+                    `;
+                }
+            }
+        }
+
+        function renderTests() {
+            const container = document.getElementById('testsContainer');
+            const filteredTests = currentFilter === 'all' 
+                ? tests 
+                : tests.filter(test => test.level === currentFilter);
+            
+            if (filteredTests.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h5>No hay tests para este nivel</h5>
+                        <p class="text-muted">Intenta con otro filtro de dificultad.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredTests.map(test => {
+                const isAnswered = answeredTests.has(test.id);
+                const levelClass = `level-${test.level}`;
+                const levelColor = {
+                    'básico': 'success',
+                    'intermedio': 'warning', 
+                    'avanzado': 'danger',
+                    'desafío': 'dark'
+                }[test.level];
+
+                return `
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card test-card ${levelClass} h-100 ${isAnswered ? 'opacity-75' : ''}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge bg-${levelColor} level-badge">
+                                        ${test.level.charAt(0).toUpperCase() + test.level.slice(1)}
+                                    </span>
+                                    ${isAnswered ? '<i class="fas fa-check-circle text-success"></i>' : ''}
+                                </div>
+                                <h6 class="card-title">
+                                    <i class="fas fa-hashtag me-1"></i>Test ${test.id}
+                                </h6>
+                                <p class="card-text small text-muted">${test.question}</p>
+                                <button class="btn btn-sm btn-primary" onclick="openTest(${test.id})" ${isAnswered ? 'disabled' : ''}>
+                                    <i class="fas fa-play me-1"></i>
+                                    ${isAnswered ? 'Completado' : 'Comenzar'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterTests(level) {
+            currentFilter = level;
+            
+            // Actualizar botones
+            document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderTests();
+        }
+
+        function openTest(testId) {
+            const test = tests.find(t => t.id === testId);
+            if (!test) return;
+
+            currentTestIndex = tests.findIndex(t => t.id === testId);
+            
+            // Guardar el test actual globalmente
+            window.currentTest = test;
+            
+            document.getElementById('modalTitle').textContent = `Test ${test.id}`;
+            document.getElementById('modalLevel').textContent = test.level;
+            document.getElementById('modalLevel').className = `badge level-badge bg-${
+                test.level === 'básico' ? 'success' : 
+                test.level === 'intermedio' ? 'warning' : 
+                test.level === 'avanzado' ? 'danger' : 'dark'
+            }`;
+            document.getElementById('questionText').textContent = test.question;
+            
+            answerEditor.setValue('');
+            document.getElementById('resultContainer').innerHTML = '';
+            document.getElementById('nextBtn').style.display = 'none';
+            
+            testModal.show();
+        }
+
+        async function checkAnswer() {
+            const test = window.currentTest || tests[currentTestIndex];
+            const userQuery = answerEditor.getValue().trim();
+            
+            if (!userQuery) {
+                showAlert('Por favor, escribe una consulta SQL', 'warning');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/validate-answer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: userQuery,
+                        correct_answer: test.correct_answer,
+                        test_number: currentTestNumber
+                    })
+                });
+
+                const data = await response.json();
+                displayResult(data);
+                
+            } catch (error) {
+                showAlert('Error al verificar la respuesta: ' + error.message, 'danger');
+            }
+        }
+
+        function displayResult(data) {
+            const container = document.getElementById('resultContainer');
+            const isCorrect = data.is_correct;
+            
+            if (!data.success) {
+                container.innerHTML = `
+                    <div class="alert alert-danger result-card">
+                        <h6><i class="fas fa-times-circle me-2"></i>Error en la consulta</h6>
+                        <p class="mb-0">${data.error}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            if (isCorrect) {
+                container.innerHTML = `
+                    <div class="alert alert-success result-card">
+                        <h6><i class="fas fa-check-circle me-2"></i>¡Correcto!</h6>
+                        <p class="mb-2">Tu consulta es correcta y funciona perfectamente.</p>
+                        ${data.user_result && data.user_result.length > 0 ? `
+                            <div class="mt-2">
+                                <strong>Resultados:</strong>
+                                <div class="table-responsive mt-1">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                ${Object.keys(data.user_result[0]).map(key => `<th>${key}</th>`).join('')}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${data.user_result.slice(0, 5).map(row => `
+                                                <tr>
+                                                    ${Object.values(row).map(val => `<td>${val}</td>`).join('')}
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                ${data.user_result.length > 5 ? `<small class="text-muted">Mostrando 5 de ${data.user_result.length} resultados</small>` : ''}
+                            </div>
+                        ` : '<p class="mb-0 text-muted">La consulta no devolvió resultados (esto puede ser normal).</p>'}
+                    </div>
+                `;
+                
+                if (!answeredTests.has(tests[currentTestIndex].id)) {
+                    answeredTests.add(tests[currentTestIndex].id);
+                    correctAnswers++;
+                    updateProgress();
+                }
+                
+                document.getElementById('nextBtn').style.display = 'inline-block';
+                
+            } else {
+                container.innerHTML = `
+                    <div class="alert alert-warning result-card">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>No es correcto</h6>
+                        <p class="mb-2">Tu consulta funciona pero no es la respuesta esperada.</p>
+                        <details class="mt-2">
+                            <summary>Ver detalles</summary>
+                            <div class="mt-2">
+                                <strong>Tu consulta normalizada:</strong>
+                                <code class="d-block mt-1 p-2 bg-light">${data.normalized_user}</code>
+                            </div>
+                            <div class="mt-2">
+                                <strong>Respuesta esperada:</strong>
+                                <code class="d-block mt-1 p-2 bg-light">${data.correct_answer}</code>
+                            </div>
+                        </details>
+                    </div>
+                `;
+            }
+        }
+
+        function showHint() {
+            const test = tests[currentTestIndex];
+            const hints = {
+                1: "Recuerda que SELECT * selecciona todas las columnas.",
+                2: "Especifica las columnas separadas por comas después de SELECT.",
+                3: "Usa la cláusula WHERE para filtrar por precio.",
+                4: "ORDER BY seguido de DESC ordena de mayor a menor.",
+                5: "Combina ORDER BY con LIMIT para obtener los primeros resultados.",
+                6: "COUNT(*) cuenta todas las filas.",
+                7: "GROUP BY agrupa por categorías, COUNT() cuenta por grupo.",
+                8: "INNER JOIN conecta dos tablas usando ON.",
+                9: "BETWEEN es perfecto para rangos numéricos.",
+                10: "LIKE con % busca coincidencias parciales.",
+                11: "Una subconsulta puede ir después de WHERE.",
+                12: "HAVING filtra grupos, similar a WHERE pero para GROUP BY.",
+                13: "CASE WHEN THEN ELSE END crea condiciones.",
+                14: "Puedes hacer múltiples JOIN en una misma consulta.",
+                15: "UPPER() convierte texto a mayúsculas.",
+                16: "LEFT JOIN incluye registros de la tabla izquierda.",
+                17: "IN con subconsulta busca en una lista de valores.",
+                18: "DATE_FORMAT() formatea fechas.",
+                19: "Puedes usar múltiples funciones de agregación.",
+                20: "Puedes ordenar por expresiones calculadas."
+            };
+            
+            const hint = hints[test.id] || "Piensa en la sintaxis SQL básica.";
+            
+            document.getElementById('resultContainer').innerHTML = `
+                <div class="alert alert-info result-card">
+                    <h6><i class="fas fa-lightbulb me-2"></i>Pista</h6>
+                    <p class="mb-0">${hint}</p>
+                </div>
+            `;
+        }
+
+        function showHint() {
+            const test = window.currentTest || tests[currentTestIndex];
+            
+            document.getElementById('resultContainer').innerHTML = `
+                <div class="alert alert-warning result-card">
+                    <h6><i class="fas fa-lightbulb me-2"></i>Pista</h6>
+                    <p class="mb-0">${test.hint || 'Piensa en qué cláusulas necesitas: SELECT, FROM, WHERE, ORDER BY, etc.'}</p>
+                </div>
+            `;
+        }
+
+        function showCorrectAnswer() {
+            const test = window.currentTest || tests[currentTestIndex];
+            
+            document.getElementById('resultContainer').innerHTML = `
+                <div class="alert alert-info result-card">
+                    <h6><i class="fas fa-eye me-2"></i>Respuesta Correcta</h6>
+                    <code class="d-block mt-2 p-2 bg-light">${test.correct_answer}</code>
+                    <small class="text-muted d-block mt-2">
+                        Puedes copiar esta respuesta y probarla para ver cómo funciona.
+                    </small>
+                </div>
+            `;
+        }
+
+        async function executeQuery() {
+            const userQuery = answerEditor.getValue().trim();
+            
+            if (!userQuery) {
+                showAlert('Por favor, escribe una consulta SQL', 'warning');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/execute-query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: userQuery
+                    })
+                });
+
+                const data = await response.json();
+                displayQueryResult(data);
+                
+            } catch (error) {
+                showAlert('Error al ejecutar la consulta: ' + error.message, 'danger');
+            }
+        }
+
+        function displayQueryResult(data) {
+            const container = document.getElementById('resultContainer');
+            
+            if (!data.success) {
+                container.innerHTML = `
+                    <div class="alert alert-danger result-card">
+                        <h6><i class="fas fa-times-circle me-2"></i>Error en la consulta</h6>
+                        <p class="mb-0">${data.error}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let resultHtml = `
+                <div class="alert alert-success result-card">
+                    <h6><i class="fas fa-check-circle me-2"></i>Consulta Ejecutada</h6>
+                    <p class="mb-2">La consulta se ejecutó correctamente.</p>
+            `;
+
+            if (data.result && data.result.length > 0) {
+                resultHtml += `
+                    <p class="mb-2"><strong>Resultados (${data.result.length} filas):</strong></p>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                `;
+                
+                // Cabeceras de la tabla
+                Object.keys(data.result[0]).forEach(key => {
+                    resultHtml += `<th>${key}</th>`;
+                });
+                
+                resultHtml += `
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                // Filas de datos
+                data.result.forEach(row => {
+                    resultHtml += '<tr>';
+                    Object.values(row).forEach(value => {
+                        resultHtml += `<td>${value}</td>`;
+                    });
+                    resultHtml += '</tr>';
+                });
+                
+                resultHtml += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else {
+                resultHtml += `
+                    <p class="mb-0"><em>La consulta no devolvió resultados.</em></p>
+                `;
+            }
+            
+            resultHtml += '</div>';
+            container.innerHTML = resultHtml;
+        }
+
+        function nextTest() {
+            testModal.hide();
+            
+            // Buscar el siguiente test no respondido
+            let nextIndex = currentTestIndex + 1;
+            while (nextIndex < tests.length && answeredTests.has(tests[nextIndex].id)) {
+                nextIndex++;
+            }
+            
+            if (nextIndex < tests.length) {
+                setTimeout(() => openTest(tests[nextIndex].id), 300);
+            } else {
+                showAlert('¡Has completado todos los tests disponibles!', 'success');
+                renderTests();
+            }
+        }
+
+        function updateProgress() {
+            const total = tests.length;
+            const percentage = Math.round((correctAnswers / total) * 100);
+            
+            document.getElementById('scoreText').textContent = `${percentage}%`;
+            
+            // Actualizar círculo de progreso
+            const circle = document.getElementById('progressCircle');
+            const circumference = 2 * Math.PI * 54;
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            renderTests();
+        }
+
+        function showAlert(message, type) {
+            // Crear alerta temporal
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
