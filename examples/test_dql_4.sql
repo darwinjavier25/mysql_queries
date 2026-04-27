@@ -93,10 +93,9 @@ Select * from productos where nombre like '%Pro%';
 select * from clientes where email like '%@gmail.com';
 
 -- TEST 16
--- PREGUNTA: Obtén los productos cuyo nombre tenga exactamente 5 caracteres
+-- PREGUNTA: Obtén los productos cuya nombre tenga exactamente 6 caracteres
 
-select * from productos where nombre like '_____'; -- 5 guiones bajos representan 5 caracteres
-
+select * from productos where nombre like '________________'; -- 15 guiones bajos representan 5 caracteres
 -- ========================================
 -- WHERE + NULL (Preguntas 17-18)
 -- ========================================
