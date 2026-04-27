@@ -4,7 +4,7 @@
 
 -- TEST 1
 -- PREGUNTA: Obtén todos los registros de la tabla 'productos'
-
+select * from productos;
 
 
 -- TEST 2
