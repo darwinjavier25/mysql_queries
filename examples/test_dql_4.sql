@@ -79,18 +79,18 @@ SELECT * FROM productos WHERE categoria_id IN (10, 20, 30);
 
 -- TEST 13
 -- PREGUNTA: Obtén los clientes cuyo nombre empiece por 'A'
-Select * from clientes where nombre like 'A';
+Select * from clientes where nombre like 'A%';
 
 
 -- TEST 14
 -- PREGUNTA: Obtén los productos cuyo nombre contenga la palabra 'Pro'
 
-Select * from productos where nombre like 'Pro';
+Select * from productos where nombre like '%Pro%';
 
 -- TEST 15
 -- PREGUNTA: Obtén los clientes cuyo email termine en '@gmail.com'
 
-select * from clientes where email like '@gmail.com';
+select * from clientes where email like '%@gmail.com';
 
 -- TEST 16
 -- PREGUNTA: Obtén los productos cuyo nombre tenga exactamente 5 caracteres
