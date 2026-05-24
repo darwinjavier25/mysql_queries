@@ -1,0 +1,161 @@
+-- QUIZ: SQL Intermedio - Joins y Subconsultas
+
+-- PREGUNTA 1: ¿Cuál es la diferencia principal entre INNER JOIN y OUTER JOIN?
+-- A) INNER JOIN es más rápido
+-- B) INNER JOIN devuelve solo coincidencias, OUTER JOIN incluye no coincidencias
+-- C) OUTER JOIN devuelve solo coincidencias
+-- D) No hay diferencia
+-- RESPUESTA: B
+-- EXPLICACION: INNER JOIN devuelve filas que coinciden en ambas tablas, OUTER JOIN incluye filas sin coincidencia
+
+-- PREGUNTA 2: ¿Qué tipo de JOIN devuelve todos los registros de la tabla izquierda?
+-- A) RIGHT JOIN
+-- B) FULL OUTER JOIN
+-- C) LEFT JOIN
+-- D) INNER JOIN
+-- RESPUESTA: C
+-- EXPLICACION: LEFT JOIN devuelve todos los registros de la tabla izquierda y los que coinciden de la derecha
+
+-- PREGUNTA 3: ¿Cuál es la sintaxis para un self-join?
+-- A) SELECT * FROM table JOIN table ON condition
+-- B) SELECT * FROM table t1 JOIN table t2 ON t1.id = t2.parent_id
+-- C) SELECT * FROM table JOIN ITSELF ON condition
+-- D) SELECT * FROM table SELF JOIN condition
+-- RESPUESTA: B
+-- EXPLICACION: Un self-join une una tabla consigo misma usando alias
+
+-- PREGUNTA 4: ¿Qué es una subconsulta?
+-- A) Una consulta dentro de otra consulta
+-- B) Una consulta sin WHERE
+-- C) Una consulta que crea una tabla
+-- D) Una consulta que modifica datos
+-- RESPUESTA: A
+-- EXPLICACION: Una subconsulta (o inner query) es una SELECT dentro de otra SELECT
+
+-- PREGUNTA 5: ¿Dónde puede aparecer una subconsulta?
+-- A) Solo en SELECT
+-- B) Solo en FROM
+-- C) Solo en WHERE
+-- D) En SELECT, FROM, WHERE, HAVING
+-- RESPUESTA: D
+-- EXPLICACION: Las subconsultas pueden estar en múltiples partes de una consulta
+
+-- PREGUNTA 6: ¿Qué es una subconsulta correlacionada?
+-- A) Una subconsulta que no usa la tabla externa
+-- B) Una subconsulta que usa valores de la consulta externa
+-- C) Una subconsulta sin WHERE
+-- D) Una subconsulta que retorna múltiples filas
+-- RESPUESTA: B
+-- EXPLICACION: Usa valores de la consulta externa en su condición WHERE
+
+-- PREGUNTA 7: ¿Cuál es la diferencia entre EXISTS e IN?
+-- A) Son iguales
+-- B) EXISTS solo verifica existencia, IN busca en un conjunto
+-- C) IN es más rápido siempre
+-- D) EXISTS solo funciona con strings
+-- RESPUESTA: B
+-- EXPLICACION: EXISTS verifica solo la existencia, IN busca en una lista de valores
+
+-- PREGUNTA 8: ¿Qué hace la cláusula ON en un JOIN?
+-- A) Define el resultado
+-- B) Especifica la condición de unión
+-- C) Filtra antes del JOIN
+-- D) Ordena los resultados
+-- RESPUESTA: B
+-- EXPLICACION: ON especifica cómo se unen las tablas (qué columnas relacionan)
+
+-- PREGUNTA 9: ¿Cuál es la función de CROSS JOIN?
+-- A) Unir dos tablas
+-- B) Produce el producto cartesiano (todas las combinaciones)
+-- C) Unir tres tablas
+-- D) Filtrar resultados
+-- RESPUESTA: B
+-- EXPLICACION: CROSS JOIN crea todas las combinaciones posibles de filas
+
+-- PREGUNTA 10: ¿Qué es una vista (VIEW) en SQL?
+-- A) Una tabla temporal
+-- B) Una consulta guardada como objeto de base de datos
+-- C) Un índice
+-- D) Un procedimiento almacenado
+-- RESPUESTA: B
+-- EXPLICACION: Una vista es una consulta guardada que se puede consultar como una tabla
+
+-- PREGUNTA 11: ¿Cuál es la sintaxis básica para crear una vista?
+-- A) CREATE VIEW nombre AS SELECT ...
+-- B) CREATE TABLE VIEW nombre AS SELECT ...
+-- C) NEW VIEW nombre FROM SELECT ...
+-- D) MAKE VIEW nombre SELECT ...
+-- RESPUESTA: A
+-- EXPLICACION: CREATE VIEW nombre AS SELECT crea una vista
+
+-- PREGUNTA 12: ¿Qué comando modifica una vista?
+-- A) MODIFY VIEW
+-- B) ALTER VIEW
+-- C) UPDATE VIEW
+-- D) CHANGE VIEW
+-- RESPUESTA: B
+-- EXPLICACION: ALTER VIEW modifica una vista existente
+
+-- PREGUNTA 13: ¿Cuál es la diferencia entre ALL y ANY?
+-- A) Son sinónimos
+-- B) ALL compara con todos, ANY con al menos uno
+-- C) ANY es más rápido que ALL
+-- D) No se pueden usar juntos
+-- RESPUESTA: B
+-- EXPLICACION: ALL verifica si la condición es verdadera para todos; ANY para al menos uno
+
+-- PREGUNTA 14: ¿Qué hace COALESCE()?
+-- A) Convierte tipos de datos
+-- B) Devuelve el primer valor no NULL
+-- C) Elimina duplicados
+-- D) Ordena los resultados
+-- RESPUESTA: B
+-- EXPLICACION: COALESCE devuelve el primer argumento que no es NULL
+
+-- PREGUNTA 15: ¿Cuál es la sintaxis para UNION vs UNION ALL?
+-- A) Son iguales
+-- B) UNION elimina duplicados, UNION ALL los mantiene
+-- C) UNION ALL elimina duplicados
+-- D) UNION concatena strings
+-- RESPUESTA: B
+-- EXPLICACION: UNION elimina duplicados, UNION ALL mantiene todos los registros
+
+-- PREGUNTA 16: ¿Qué es un índice en SQL?
+-- A) Un número de fila
+-- B) Una estructura que acelera búsquedas
+-- C) Un tipo de vista
+-- D) Una columna especial
+-- RESPUESTA: B
+-- EXPLICACION: Un índice es una estructura de datos que mejora la velocidad de búsqueda
+
+-- PREGUNTA 17: ¿Cuál es el comando para crear un índice?
+-- A) NEW INDEX
+-- B) CREATE INDEX
+-- C) ADD INDEX
+-- D) BUILD INDEX
+-- RESPUESTA: B
+-- EXPLICACION: CREATE INDEX nombre ON tabla crea un índice
+
+-- PREGUNTA 18: ¿Qué es una función de ventana (window function)?
+-- A) Una función que abre ventanas del navegador
+-- B) Una función que realiza cálculos sobre conjuntos de filas
+-- C) Una función que crea vistas
+-- D) Una función temporal
+-- RESPUESTA: B
+-- EXPLICACION: Funciones como ROW_NUMBER(), RANK() que operan sobre un conjunto de filas
+
+-- PREGUNTA 19: ¿Cuál es la sintaxis básica de una función de ventana?
+-- A) SELECT func() WINDOW nombre AS (PARTITION BY ...)
+-- B) SELECT func() OVER (PARTITION BY column ORDER BY column)
+-- C) SELECT WINDOW func() FROM table
+-- D) SELECT func() FOR WINDOW PARTITION BY column
+-- RESPUESTA: B
+-- EXPLICACION: La sintaxis es func() OVER (PARTITION BY ... ORDER BY ...)
+
+-- PREGUNTA 20: ¿Cuál es la diferencia entre una función de ventana y GROUP BY?
+-- A) Son iguales
+-- B) Las funciones de ventana retienen las filas originales, GROUP BY las agrupa
+-- C) GROUP BY es más eficiente siempre
+-- D) Las funciones de ventana no pueden usarse en producción
+-- RESPUESTA: B
+-- EXPLICACION: Window functions devuelven una fila por cada fila de entrada, GROUP BY agrupa

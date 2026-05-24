@@ -1,0 +1,4 @@
+-- TEST 3: Ver contenedores en ejecución
+-- PREGUNTA: Escribe el comando que lista los contenedores Docker que están corriendo.
+-- RESPUESTA: docker ps
+-- HINT: Usa docker seguido de tres letras para mostrar contenedores activos.

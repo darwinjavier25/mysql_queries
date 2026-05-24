@@ -1,0 +1,4 @@
+-- TEST 1: Mostrar el directorio actual
+-- PREGUNTA: Escribe el comando que muestra la ruta absoluta del directorio actual.
+-- RESPUESTA: pwd
+-- HINT: Es un comando simple que imprime el directorio de trabajo.

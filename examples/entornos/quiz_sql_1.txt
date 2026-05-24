@@ -1,0 +1,161 @@
+-- QUIZ: SQL Básico - Consultas SELECT
+
+-- PREGUNTA 1: ¿Cuál es la sintaxis correcta para una consulta SELECT básica?
+-- A) SELECT * FROM table WHERE id = 1;
+-- B) SELECT FROM table id = 1;
+-- C) SELECT * IN table WHERE id = 1;
+-- D) FIND * FROM table WHERE id = 1;
+-- RESPUESTA: A
+-- EXPLICACION: La sintaxis correcta es SELECT [columnas] FROM [tabla] WHERE [condición]
+
+-- PREGUNTA 2: ¿Qué palabra clave se utiliza para ordenar resultados en orden descendente?
+-- A) SORT DESC
+-- B) ORDER BY DESC
+-- C) ORDER DESC
+-- D) SORT BY DOWN
+-- RESPUESTA: B
+-- EXPLICACION: ORDER BY DESC ordena los resultados en orden descendente
+
+-- PREGUNTA 3: ¿Cuál es la función para contar registros en SQL?
+-- A) COUNT()
+-- B) TOTAL()
+-- C) SUM()
+-- D) CALC()
+-- RESPUESTA: A
+-- EXPLICACION: COUNT() cuenta el número de registros que cumplen una condición
+
+-- PREGUNTA 4: ¿Qué operador se utiliza para múltiples condiciones en WHERE?
+-- A) &&
+-- B) AND / OR
+-- C) & |
+-- D) BOTH
+-- RESPUESTA: B
+-- EXPLICACION: AND y OR son los operadores lógicos en SQL para múltiples condiciones
+
+-- PREGUNTA 5: ¿Cuál es la forma correcta de limitar resultados a los primeros 10 registros?
+-- A) SELECT * FROM table FIRST 10;
+-- B) SELECT TOP 10 * FROM table;
+-- C) SELECT * FROM table LIMIT 10;
+-- D) SELECT * FROM table TOP 10;
+-- RESPUESTA: C
+-- EXPLICACION: LIMIT especifica el número máximo de registros a devolver
+
+-- PREGUNTA 6: ¿Qué cláusula se usa para filtrar después de agrupar registros?
+-- A) WHERE
+-- B) GROUP BY
+-- C) HAVING
+-- D) FILTER
+-- RESPUESTA: C
+-- EXPLICACION: HAVING filtra los grupos después de GROUP BY, mientras WHERE filtra antes
+
+-- PREGUNTA 7: ¿Cuál es la sintaxis para un INNER JOIN?
+-- A) SELECT * FROM t1, t2 WHERE t1.id = t2.id;
+-- B) SELECT * FROM t1 INNER JOIN t2 ON t1.id = t2.id;
+-- C) SELECT * FROM t1 + t2 ON t1.id = t2.id;
+-- D) SELECT * FROM t1 JOIN t2 WHERE t1.id = t2.id;
+-- RESPUESTA: B
+-- EXPLICACION: INNER JOIN con ON es la sintaxis correcta para unir tablas
+
+-- PREGUNTA 8: ¿Qué función calcula el promedio de valores?
+-- A) AVERAGE()
+-- B) AVG()
+-- C) MEAN()
+-- D) CALC_AVG()
+-- RESPUESTA: B
+-- EXPLICACION: AVG() calcula el promedio aritmético de una columna
+
+-- PREGUNTA 9: ¿Cuál es la diferencia entre DISTINCT y WHERE?
+-- A) Son iguales
+-- B) DISTINCT elimina duplicados, WHERE filtra por condición
+-- C) WHERE elimina duplicados, DISTINCT filtra
+-- D) No se pueden usar juntos
+-- RESPUESTA: B
+-- EXPLICACION: DISTINCT elimina filas duplicadas, WHERE aplica condiciones
+
+-- PREGUNTA 10: ¿Qué palabra clave se usa para combinar resultados de múltiples SELECT?
+-- A) COMBINE
+-- B) MERGE
+-- C) UNION
+-- D) JOIN
+-- RESPUESTA: C
+-- EXPLICACION: UNION combina resultados de dos o más SELECT en un solo conjunto
+
+-- PREGUNTA 11: ¿Cuál es la función para encontrar el valor máximo?
+-- A) MAXIM()
+-- B) TOP()
+-- C) MAX()
+-- D) LARGEST()
+-- RESPUESTA: C
+-- EXPLICACION: MAX() devuelve el valor máximo de una columna
+
+-- PREGUNTA 12: ¿Cómo se aliasa una columna en SQL?
+-- A) SELECT column NAME alias FROM table;
+-- B) SELECT column RENAME alias FROM table;
+-- C) SELECT column AS alias FROM table;
+-- D) SELECT column -> alias FROM table;
+-- RESPUESTA: C
+-- EXPLICACION: AS se usa para crear un alias para una columna o tabla
+
+-- PREGUNTA 13: ¿Qué cláusula permite agrupar registros con la misma condición?
+-- A) PARTITION BY
+-- B) GROUP BY
+-- C) SEGMENT BY
+-- D) CLUSTER BY
+-- RESPUESTA: B
+-- EXPLICACION: GROUP BY agrupa registros con valores iguales en la columna especificada
+
+-- PREGUNTA 14: ¿Cuál es la forma correcta de usar LIKE para búsquedas de patrones?
+-- A) WHERE name LIKE 'A%';
+-- B) WHERE name MATCH 'A*';
+-- C) WHERE name PATTERN 'A.';
+-- D) WHERE name SEARCH 'A%';
+-- RESPUESTA: A
+-- EXPLICACION: LIKE con % (cualquier carácter) y _ (un carácter) se usa para búsquedas
+
+-- PREGUNTA 15: ¿Qué operador se usa para especificar un rango de valores?
+-- A) RANGE
+-- B) BETWEEN
+-- C) IN RANGE
+-- D) FROM...TO
+-- RESPUESTA: B
+-- EXPLICACION: BETWEEN especifica un rango de valores incluidos los extremos
+
+-- PREGUNTA 16: ¿Cuál es la función para sumar valores?
+-- A) TOTAL()
+-- B) ADD()
+-- C) SUM()
+-- D) CALCULATE()
+-- RESPUESTA: C
+-- EXPLICACION: SUM() calcula la suma de todos los valores de una columna
+
+-- PREGUNTA 17: ¿Cómo se realiza un LEFT JOIN?
+-- A) SELECT * FROM t1 LEFT t2 ON t1.id = t2.id;
+-- B) SELECT * FROM t1 LEFT JOIN t2 ON t1.id = t2.id;
+-- C) SELECT * FROM t1 LEFT INNER t2 ON t1.id = t2.id;
+-- D) SELECT * FROM t1, t2 LEFT WHERE t1.id = t2.id;
+-- RESPUESTA: B
+-- EXPLICACION: LEFT JOIN devuelve todos los registros de la tabla izquierda
+
+-- PREGUNTA 18: ¿Qué valor devuelve AVG() cuando no hay registros?
+-- A) 0
+-- B) NULL
+-- C) Error
+-- D) 1
+-- RESPUESTA: B
+-- EXPLICACION: Las funciones de agregación devuelven NULL cuando no hay datos
+
+-- PREGUNTA 19: ¿Para qué sirve la cláusula WHERE en una subconsulta?
+-- A) Para unir tablas
+-- B) Para filtrar resultados de la subconsulta
+-- C) Para agrupar registros
+-- D) Para ordenar resultados
+-- RESPUESTA: B
+-- EXPLICACION: WHERE en la subconsulta filtra los datos antes de pasar a la consulta principal
+
+-- PREGUNTA 20: ¿Cuál es el operador para NOT EQUAL (no igual)?
+-- A) <>
+-- B) !=
+-- C) <> o !=
+-- D) ~=
+-- RESPUESTA: C
+-- EXPLICACION: Ambos <> y != se pueden usar para expresar "no igual" en SQL

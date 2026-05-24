@@ -1,0 +1,161 @@
+-- QUIZ: Docker Avanzado - Redes y Orquestación
+
+-- PREGUNTA 1: ¿Cuál es el propósito de Docker Networks?
+-- A) Configurar el almacenamiento
+-- B) Permitir que los contenedores se comuniquen
+-- C) Compilar imágenes
+-- D) Hacer backup
+-- RESPUESTA: B
+-- EXPLICACION: Las redes Docker permiten que los contenedores se comuniquen entre sí
+
+-- PREGUNTA 2: ¿Cuántos tipos de redes Docker existen por defecto?
+-- A) 1
+-- B) 2
+-- C) 3
+-- D) 5
+-- RESPUESTA: C
+-- EXPLICACION: bridge, host, none, y también puede haber redes personalizadas
+
+-- PREGUNTA 3: ¿Cuál es la red por defecto para nuevos contenedores?
+-- A) host
+-- B) bridge
+-- C) overlay
+-- D) none
+-- RESPUESTA: B
+-- EXPLICACION: La red bridge es la red por defecto para contenedores
+
+-- PREGUNTA 4: ¿Qué es Docker Swarm?
+-- A) Una herramienta de compilación
+-- B) Un orquestador nativo de Docker
+-- C) Un editor de código
+-- D) Un motor de búsqueda
+-- RESPUESTA: B
+-- EXPLICACION: Docker Swarm es el orquestador de contenedores integrado en Docker
+
+-- PREGUNTA 5: ¿Qué es un servicio en Docker Swarm?
+-- A) Un contenedor
+-- B) Una imagen
+-- C) Un conjunto de contenedores replicados
+-- D) Una red
+-- RESPUESTA: C
+-- EXPLICACION: Un servicio es una tarea o un conjunto de tareas replicadas en el swarm
+
+-- PREGUNTA 6: ¿Cuál es el propósito de un healthcheck en Docker?
+-- A) Verificar el tamaño de la imagen
+-- B) Verificar la salud del contenedor
+-- C) Optimizar el rendimiento
+-- D) Compresión de archivos
+-- RESPUESTA: B
+-- EXPLICACION: HEALTHCHECK verifica si el contenedor sigue funcionando correctamente
+
+-- PREGUNTA 7: ¿Cómo se define un healthcheck en Dockerfile?
+-- A) HEALTH CHECK cmd
+-- B) HEALTHCHECK --interval=30s CMD curl ...
+-- C) CHECK HEALTH cmd
+-- D) VERIFY cmd
+-- RESPUESTA: B
+-- EXPLICACION: HEALTHCHECK define cómo comprobar la salud del contenedor
+
+-- PREGUNTA 8: ¿Qué es un multi-stage build?
+-- A) Un build con múltiples dockerfiles
+-- B) Un proceso de construcción que usa múltiples etapas
+-- C) Un build que se ejecuta múltiples veces
+-- D) Un error de compilación
+-- RESPUESTA: B
+-- EXPLICACION: Multi-stage permite usar múltiples FROM para reducir el tamaño final
+
+-- PREGUNTA 9: ¿Cuál es la ventaja principal de multi-stage builds?
+-- A) Compilación más rápida
+-- B) Imágenes más pequeñas
+-- C) Más funcionalidades
+-- D) Mejor seguridad del código
+-- RESPUESTA: B
+-- EXPLICACION: Los multi-stage builds reducen el tamaño final eliminando archivos innecesarios
+
+-- PREGUNTA 10: ¿Qué es un .dockerignore?
+-- A) Un archivo de configuración
+-- B) Lista archivos a ignorar durante el build
+-- C) Una carpeta especial
+-- D) Un tipo de imagen
+-- RESPUESTA: B
+-- EXPLICACION: .dockerignore especifica archivos a excluir del contexto de build
+
+-- PREGUNTA 11: ¿Cuál es la diferencia entre CMD y ENTRYPOINT?
+-- A) Son iguales
+-- B) CMD es el comando por defecto, ENTRYPOINT es el punto de entrada
+-- C) ENTRYPOINT es para desarrollo, CMD para producción
+-- D) No hay relación
+-- RESPUESTA: B
+-- EXPLICACION: ENTRYPOINT es el comando principal, CMD proporciona argumentos
+
+-- PREGUNTA 12: ¿Qué comando escala un servicio en Swarm?
+-- A) docker service scale nombre=3
+-- B) docker scale nombre 3
+-- C) docker swarm scale nombre=3
+-- D) docker service update --replicas 3 nombre
+-- RESPUESTA: A
+-- EXPLICACION: docker service scale nombre=3 crea 3 réplicas del servicio
+
+-- PREGUNTA 13: ¿Qué es Docker Hub?
+-- A) Un servidor local de Docker
+-- B) El registro público de Docker
+-- C) Una herramienta de análisis
+-- D) Un editor de configuración
+-- RESPUESTA: B
+-- EXPLICACION: Docker Hub es el repositorio público oficial de imágenes Docker
+
+-- PREGUNTA 14: ¿Cómo se hace push de una imagen a un registro?
+-- A) docker push usuario/imagen
+-- B) docker upload usuario/imagen
+-- C) docker send usuario/imagen
+-- D) docker registry push usuario/imagen
+-- RESPUESTA: A
+-- EXPLICACION: docker push envía una imagen a un registro (por defecto Docker Hub)
+
+-- PREGUNTA 15: ¿Qué es el contexto de build en Docker?
+-- A) La carpeta de trabajo
+-- B) El conjunto de archivos enviados al daemon
+-- C) La configuración del sistema
+-- D) Las variables de entorno
+-- RESPUESTA: B
+-- EXPLICACION: El contexto es el directorio con archivos enviados al daemon para el build
+
+-- PREGUNTA 16: ¿Cómo se optimiza el tamaño de una imagen Docker?
+-- A) Usando menos contenedores
+-- B) Multi-stage, .dockerignore, minimizar capas
+-- C) Aumentando la RAM
+-- D) Usando más volúmenes
+-- RESPUESTA: B
+-- EXPLICACION: Multi-stage, .dockerignore, y consolidar comandos RUN reducen el tamaño
+
+-- PREGUNTA 17: ¿Qué es el registro privado en Docker?
+-- A) Un archivo de configuración
+-- B) Una instancia de Docker Registry privada
+-- C) Un contenedor especial
+-- D) Un tipo de volumen
+-- RESPUESTA: B
+-- EXPLICACION: Un registro privado es una instancia de Docker Registry controlada internamente
+
+-- PREGUNTA 18: ¿Cuál es la ventaja de usar docker-compose en desarrollo?
+-- A) Mejora el rendimiento
+-- B) Define la aplicación como código
+-- C) Requiere menos recursos
+-- D) Aumenta la seguridad
+-- RESPUESTA: B
+-- EXPLICACION: docker-compose permite definir servicios como infraestructura como código
+
+-- PREGUNTA 19: ¿Qué es el networking en Docker Swarm?
+-- A) Conexión a internet
+-- B) Las redes overlay que conectan servicios
+-- C) Configuración de firewall
+-- D) Enrutamiento de puertos
+-- RESPUESTA: B
+-- EXPLICACION: Docker Swarm usa redes overlay para comunicar servicios en múltiples hosts
+
+-- PREGUNTA 20: ¿Cómo se asegura una imagen en Docker?
+-- A) Escaneando vulnerabilidades
+-- B) Usando imágenes base confiables, minimalistas
+-- C) Escaneando y usando best practices
+-- D) Todas las anteriores
+-- RESPUESTA: D
+-- EXPLICACION: Seguridad incluye escaneo, imágenes base seguras, y seguir mejores prácticas

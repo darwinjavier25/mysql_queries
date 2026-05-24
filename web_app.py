@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 import os
 import re
+import shlex
+import subprocess
 from dotenv import load_dotenv
 from sql_executor import SQLExecutor
 from pathlib import Path
@@ -28,6 +30,11 @@ sql_executor = SQLExecutor(DB_CONFIG)
 
 @app.route('/')
 def index():
+    return render_template('home.html')
+
+
+@app.route('/sql')
+def sql_console():
     return render_template('index.html')
 
 @app.route('/tests')
@@ -450,6 +457,381 @@ def test_connection():
     except Exception as e:
         print(f"Connection test error: {str(e)}")
         return jsonify({"success": False, "error": str(e)})
+
+
+@app.route('/entornos')
+def entornos():
+    return render_template('entornos.html')
+
+
+def _safe_execute_command(command, timeout=5):
+    """Ejecuta un comando limitado de forma segura usando una whitelist básica.
+    Devuelve dict {success, stdout, stderr, returncode}
+    """
+    # Whitelist de comandos (comando base -> subcomandos permitidos o None para cualquiera)
+    WHITELIST = {
+        'ls': None,
+        'pwd': None,
+        'cat': None,
+        'echo': None,
+        'whoami': None,
+        # git: allow common read-only/info subcommands
+        'git': [
+            'status', 'log', 'branch', 'rev-parse', 'show', 'remote', 'ls-remote', 'tag',
+            'describe', 'diff', 'shortlog', 'help'
+        ],
+        # docker: allow common inspect/info commands (no run/exec)
+        'docker': [
+            'ps', 'images', 'inspect', 'version', 'info', 'stats'
+        ]
+    }
+
+    try:
+        parts = shlex.split(command)
+        if len(parts) == 0:
+            return {"success": False, "error": "Empty command"}
+
+        base = parts[0]
+        if base not in WHITELIST:
+            return {"success": False, "error": f"Comando no permitido: {base}"}
+
+        allowed_subs = WHITELIST[base]
+        # If there is a subcommand restriction (e.g., git), check it
+        if allowed_subs is not None and len(parts) > 1:
+            sub = parts[1]
+            # Algunos subcomandos pueden venir precedidos por - o --, permitir flags
+            if sub.startswith('-'):
+                # allow flags
+                pass
+            elif sub not in allowed_subs:
+                return {"success": False, "error": f"Subcomando no permitido para {base}: {sub}"}
+
+        # Limit tokens to avoid long pipelines
+        if len(parts) > 10:
+            return {"success": False, "error": "Comando demasiado largo"}
+
+        # Ejecutar usando subprocess.run con timeout
+        completed = subprocess.run(parts, capture_output=True, text=True, timeout=timeout)
+        return {
+            "success": True,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "returncode": completed.returncode
+        }
+
+    except subprocess.TimeoutExpired:
+        return {"success": False, "error": "Timeout: el comando tardó demasiado"}
+    except FileNotFoundError:
+        return {"success": False, "error": "Comando no encontrado en el sistema"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+@app.route('/entornos/api/exec', methods=['POST'])
+def entornos_exec():
+    try:
+        data = request.get_json() or {}
+        command = data.get('command', '').strip()
+        if not command:
+            return jsonify({"success": False, "error": "Command is required"})
+
+        result = _safe_execute_command(command, timeout=8)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+def parse_entornos_test_file(content):
+    test = {
+        'title': '',
+        'question': '',
+        'answer': '',
+        'hint': '',
+        'content': content
+    }
+    for line in content.splitlines():
+        line = line.strip()
+        if line.startswith('-- TEST') and ':' in line:
+            test['title'] = line.split(':', 1)[1].strip()
+        elif line.startswith('-- PREGUNTA:'):
+            test['question'] = line.split(':', 1)[1].strip()
+        elif line.startswith('-- INSTRUCCIONES:') and not test['question']:
+            test['question'] = line.split(':', 1)[1].strip()
+        elif line.startswith('-- RESPUESTA:'):
+            test['answer'] = line.split(':', 1)[1].strip()
+        elif line.startswith('-- HINT:'):
+            test['hint'] = line.split(':', 1)[1].strip()
+    return test
+
+
+def get_entornos_category(filename, parsed=None):
+    text = f"{filename} {(parsed or {}).get('title', '')} {(parsed or {}).get('question', '')}".lower()
+    if 'docker' in text:
+        return 'docker'
+    if 'git' in text:
+        return 'git'
+    if 'uml' in text:
+        return 'uml'
+    if 'sql' in text or 'base de datos' in text:
+        return 'sql'
+    if 'linux' in text or 'shell' in text or 'pwd' in text or 'directorio' in text:
+        return 'linux'
+    return 'general'
+
+
+def resolve_entornos_example_file(filename):
+    if not filename or Path(filename).name != filename:
+        return None
+    target = Path(__file__).parent / 'examples' / 'entornos' / filename
+    return target if target.exists() else None
+
+
+@app.route('/entornos/api/list-tests', methods=['GET'])
+def entornos_list_tests():
+    try:
+        category = request.args.get('category', '').lower().strip()
+        examples_dir = Path(__file__).parent / 'examples' / 'entornos'
+        tests = []
+        if examples_dir.exists():
+            for file_path in sorted(examples_dir.glob('test_*.*')):
+                content = file_path.read_text(encoding='utf-8')
+                parsed = parse_entornos_test_file(content)
+                if not parsed.get('answer'):
+                    continue
+                parsed_category = get_entornos_category(file_path.name, parsed)
+                if category and parsed_category != category:
+                    continue
+                title = parsed.get('title', file_path.name)
+                tests.append({
+                    'filename': file_path.name,
+                    'title': title,
+                    'question': parsed.get('question', ''),
+                    'category': parsed_category
+                })
+        return jsonify({"success": True, "tests": tests, "category": category})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route('/entornos/api/load-test', methods=['GET'])
+def entornos_load_test():
+    try:
+        test_file = request.args.get('file')
+        if not test_file:
+            return jsonify({"success": False, "error": "file parameter required"})
+
+        target = resolve_entornos_example_file(test_file)
+        if not target:
+            return jsonify({"success": False, "error": "Test file not found"})
+
+        content = target.read_text(encoding='utf-8')
+        test = parse_entornos_test_file(content)
+        test['filename'] = test_file
+        return jsonify({"success": True, **test})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route('/entornos/api/validate-test', methods=['POST'])
+def entornos_validate_test():
+    try:
+        data = request.get_json() or {}
+        test_file = data.get('file')
+        user_answer = data.get('answer', '').strip()
+        if not test_file or not user_answer:
+            return jsonify({"success": False, "error": "file and answer are required"})
+
+        target = resolve_entornos_example_file(test_file)
+        if not target:
+            return jsonify({"success": False, "error": "Test file not found"})
+
+        content = target.read_text(encoding='utf-8')
+        test = parse_entornos_test_file(content)
+        expected = test.get('answer', '').strip()
+
+        def normalize_command(cmd):
+            normalized = ' '.join(cmd.lower().strip().split())
+            return normalized[:-1].strip() if normalized.endswith(';') else normalized
+
+        is_correct = normalize_command(user_answer) == normalize_command(expected)
+        return jsonify({
+            "success": True,
+            "is_correct": is_correct,
+            "expected": expected,
+            "user_answer": user_answer
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+@app.route('/entornos/api/quiz-list', methods=['GET'])
+def entornos_quiz_list():
+    """List all quizzes for a given entornos category."""
+    try:
+        category = request.args.get('category', 'linux').lower()
+        if category not in {'linux', 'git', 'docker', 'uml'}:
+            return jsonify({"success": False, "error": "Categoría no disponible para Entornos"})
+
+        examples_dir = Path(__file__).parent / 'examples' / 'entornos'
+        quizzes = []
+        
+        if examples_dir.exists():
+            for file_path in sorted(examples_dir.glob(f'quiz_{category}_*.txt')):
+                content = file_path.read_text(encoding='utf-8')
+                parsed = parse_entornos_quiz_file(content)
+                title = parsed.get('title', file_path.name)
+                quizzes.append({
+                    'filename': file_path.name,
+                    'title': title,
+                    'question_count': len(parsed.get('questions', []))
+                })
+        
+        return jsonify({"success": True, "quizzes": quizzes, "category": category})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route('/entornos/api/load-quiz', methods=['GET'])
+def entornos_load_quiz():
+    """Load a quiz with 20 multiple-choice questions"""
+    try:
+        quiz_file = request.args.get('file')
+        if not quiz_file:
+            return jsonify({"success": False, "error": "file parameter required"})
+        
+        if Path(quiz_file).name != quiz_file:
+            return jsonify({"success": False, "error": "Quiz file not found"})
+
+        target = Path(__file__).parent / 'examples' / 'entornos' / quiz_file
+        if not target.exists() or not re.match(r'quiz_(linux|git|docker|uml)_\d+\.txt$', quiz_file):
+            return jsonify({"success": False, "error": "Quiz file not found"})
+        
+        content = target.read_text(encoding='utf-8')
+        quiz_data = parse_entornos_quiz_file(content)
+        
+        return jsonify({
+            "success": True,
+            "title": quiz_data.get('title', quiz_file),
+            "questions": quiz_data.get('questions', []),
+            "filename": quiz_file
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route('/entornos/api/validate-quiz', methods=['POST'])
+def entornos_validate_quiz():
+    """Validate multiple-choice quiz answers"""
+    try:
+        data = request.get_json() or {}
+        quiz_file = data.get('file')
+        answers = data.get('answers', {})  # dict: {q0: 'A', q1: 'B', ...}
+        
+        if not quiz_file:
+            return jsonify({"success": False, "error": "file parameter required"})
+        
+        if Path(quiz_file).name != quiz_file:
+            return jsonify({"success": False, "error": "Quiz file not found"})
+
+        target = Path(__file__).parent / 'examples' / 'entornos' / quiz_file
+        if not target.exists() or not re.match(r'quiz_(linux|git|docker|uml)_\d+\.txt$', quiz_file):
+            return jsonify({"success": False, "error": "Quiz file not found"})
+        
+        content = target.read_text(encoding='utf-8')
+        quiz_data = parse_entornos_quiz_file(content)
+        questions = quiz_data.get('questions', [])
+        
+        correct_count = 0
+        results = []
+        
+        for i, question in enumerate(questions):
+            user_answer = answers.get(f'q{i}', '')
+            correct_answer = question.get('correct_answer', '')
+            is_correct = user_answer.upper() == correct_answer.upper()
+            
+            if is_correct:
+                correct_count += 1
+            
+            results.append({
+                'question_id': i,
+                'user_answer': user_answer,
+                'correct_answer': correct_answer,
+                'is_correct': is_correct,
+                'explanation': question.get('explanation', '')
+            })
+        
+        score_percentage = round((correct_count / len(questions)) * 100, 1) if questions else 0
+        
+        return jsonify({
+            "success": True,
+            "correct_count": correct_count,
+            "total_questions": len(questions),
+            "score_percentage": score_percentage,
+            "results": results
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+def parse_entornos_quiz_file(content):
+    """Parse a quiz file with format:
+    -- QUIZ: Quiz Title
+    -- PREGUNTA 1: Question text?
+    -- A) Option A
+    -- B) Option B
+    -- C) Option C
+    -- D) Option D
+    -- RESPUESTA: A
+    -- EXPLICACION: Explanation text
+    """
+    quiz = {
+        'title': '',
+        'questions': []
+    }
+    
+    lines = content.splitlines()
+    current_question = None
+    
+    for line in lines:
+        line = line.strip()
+        
+        # Parse quiz title
+        if line.startswith('-- QUIZ:'):
+            quiz['title'] = line.replace('-- QUIZ:', '').strip()
+        
+        # Parse question
+        elif line.startswith('-- PREGUNTA') and ':' in line:
+            if current_question:
+                quiz['questions'].append(current_question)
+            question_text = line.split(':', 1)[1].strip()
+            current_question = {
+                'text': question_text,
+                'options': [],
+                'correct_answer': '',
+                'explanation': ''
+            }
+        
+        # Parse options (A, B, C, D)
+        elif current_question and line.startswith('-- ') and len(line) > 4 and line[3] in 'ABCD' and line[4] == ')':
+            option_text = line[5:].strip()
+            current_question['options'].append({
+                'letter': line[3],
+                'text': option_text
+            })
+        
+        # Parse correct answer
+        elif current_question and line.startswith('-- RESPUESTA:'):
+            current_question['correct_answer'] = line.replace('-- RESPUESTA:', '').strip()
+        
+        # Parse explanation
+        elif current_question and line.startswith('-- EXPLICACION:'):
+            current_question['explanation'] = line.replace('-- EXPLICACION:', '').strip()
+    
+    # Add last question
+    if current_question:
+        quiz['questions'].append(current_question)
+    
+    return quiz
+
 
 @app.teardown_appcontext
 def teardown_db(exception):

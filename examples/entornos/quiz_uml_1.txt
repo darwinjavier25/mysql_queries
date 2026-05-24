@@ -1,0 +1,161 @@
+-- QUIZ: UML - Diagramas y Modelado
+
+-- PREGUNTA 1: ¿Qué significa UML?
+-- A) Universal Module Language
+-- B) Unified Modeling Language
+-- C) Universal Markup Language
+-- D) Unified Module List
+-- RESPUESTA: B
+-- EXPLICACION: UML es el Lenguaje Unificado de Modelado estándar para software
+
+-- PREGUNTA 2: ¿Cuál es el propósito principal de un diagrama de clases?
+-- A) Mostrar el flujo de datos
+-- B) Representar la estructura estática del sistema
+-- C) Mostrar interacciones en tiempo de ejecución
+-- D) Planificar la infraestructura
+-- RESPUESTA: B
+-- EXPLICACION: El diagrama de clases representa la estructura estática del sistema
+
+-- PREGUNTA 3: ¿Qué relación en UML indica herencia?
+-- A) Agregación
+-- B) Asociación
+-- C) Generalización
+-- D) Composición
+-- RESPUESTA: C
+-- EXPLICACION: La generalización (flecha hueca) representa la herencia en UML
+
+-- PREGUNTA 4: ¿Cuál es el símbolo de un atributo privado en una clase UML?
+-- A) +
+-- B) -
+-- C) #
+-- D) ~
+-- RESPUESTA: B
+-- EXPLICACION: - indica atributos y métodos privados (private)
+
+-- PREGUNTA 5: ¿Qué tipo de diagrama muestra la secuencia de interacciones?
+-- A) Diagrama de clases
+-- B) Diagrama de secuencia
+-- C) Diagrama de casos de uso
+-- D) Diagrama de estados
+-- RESPUESTA: B
+-- EXPLICACION: El diagrama de secuencia muestra cómo los objetos interactúan en tiempo
+
+-- PREGUNTA 6: ¿Cuál es el símbolo de un atributo público en UML?
+-- A) -
+-- B) #
+-- C) +
+-- D) ~
+-- RESPUESTA: C
+-- EXPLICACION: + indica atributos y métodos públicos (public)
+
+-- PREGUNTA 7: ¿Qué es un caso de uso en UML?
+-- A) Una función del sistema
+-- B) Una interacción específica entre un actor y el sistema
+-- C) Un diagrama de clases
+-- D) Un patrón de diseño
+-- RESPUESTA: B
+-- EXPLICACION: Un caso de uso describe funcionalidad visible para los usuarios
+
+-- PREGUNTA 8: ¿Qué diferencia hay entre agregación y composición?
+-- A) Son iguales
+-- B) Agregación es una relación débil, composición es fuerte
+-- C) Composición es una relación débil, agregación es fuerte
+-- D) No hay relación entre ellas
+-- RESPUESTA: B
+-- EXPLICACION: Agregación es una relación flexible; composición es exclusiva
+
+-- PREGUNTA 9: ¿Cuál es el símbolo de un atributo protegido en UML?
+-- A) +
+-- B) -
+-- C) #
+-- D) ~
+-- RESPUESTA: C
+-- EXPLICACION: # indica atributos y métodos protegidos (protected)
+
+-- PREGUNTA 10: ¿Qué diagrama muestra los diferentes estados de un objeto?
+-- A) Diagrama de secuencia
+-- B) Diagrama de actividad
+-- C) Diagrama de estados
+-- D) Diagrama de componentes
+-- RESPUESTA: C
+-- EXPLICACION: El diagrama de estados muestra los posibles estados y transiciones
+
+-- PREGUNTA 11: ¿Qué es una asociación en UML?
+-- A) Una conexión lógica entre clases
+-- B) Una herencia
+-- C) Una implementación
+-- D) Un archivo
+-- RESPUESTA: A
+-- EXPLICACION: Una asociación es una relación entre dos o más clases
+
+-- PREGUNTA 12: ¿Cuál es la multiplicidad en UML?
+-- A) El número de métodos en una clase
+-- B) El número de instancias permitidas en una relación
+-- C) El número de líneas en un diagrama
+-- D) El número de atributos privados
+-- RESPUESTA: B
+-- EXPLICACION: La multiplicidad especifica cuántos objetos participan en una relación
+
+-- PREGUNTA 13: ¿Qué diagrama muestra las dependencias entre componentes?
+-- A) Diagrama de clases
+-- B) Diagrama de componentes
+-- C) Diagrama de secuencia
+-- D) Diagrama de casos de uso
+-- RESPUESTA: B
+-- EXPLICACION: El diagrama de componentes muestra los componentes y sus dependencias
+
+-- PREGUNTA 14: ¿Qué significa la multiplicidad 1..* en UML?
+-- A) Exactamente una instancia
+-- B) Cero o más instancias
+-- C) Una o más instancias
+-- D) Exactamente múltiples instancias
+-- RESPUESTA: C
+-- EXPLICACION: 1..* significa de 1 a muchas instancias
+
+-- PREGUNTA 15: ¿Cuál es el propósito de un diagrama de actividad?
+-- A) Mostrar clases
+-- B) Mostrar el flujo de control y actividades
+-- C) Mostrar herencias
+-- D) Mostrar bases de datos
+-- RESPUESTA: B
+-- EXPLICACION: El diagrama de actividad muestra el flujo de procesos
+
+-- PREGUNTA 16: ¿Qué símbolo se usa para representar a un actor en un caso de uso?
+-- A) Una caja
+-- B) Un círculo
+-- C) Un monigote
+-- D) Un triángulo
+-- RESPUESTA: C
+-- EXPLICACION: Los actores se representan como figuras de personas
+
+-- PREGUNTA 17: ¿Qué es una interfaz en UML?
+-- A) Una clase especial que define contratos
+-- B) Un diagrama
+-- C) Un atributo
+-- D) Una relación
+-- RESPUESTA: A
+-- EXPLICACION: Una interfaz define un contrato que otras clases deben implementar
+
+-- PREGUNTA 18: ¿Cuál es la multiplicidad 0..1 en UML?
+-- A) Cero o muchas instancias
+-- B) Una o cero instancias (opcional)
+-- C) Muchas instancias
+-- D) Exactamente una
+-- RESPUESTA: B
+-- EXPLICACION: 0..1 significa cero o una instancia (relación opcional)
+
+-- PREGUNTA 19: ¿Qué diagrama muestra la distribución física de componentes?
+-- A) Diagrama de clases
+-- B) Diagrama de despliegue
+-- C) Diagrama de secuencia
+-- D) Diagrama de estados
+-- RESPUESTA: B
+-- EXPLICACION: El diagrama de despliegue muestra cómo se distribuyen los componentes
+
+-- PREGUNTA 20: ¿Cuál es la diferencia entre herencia y realización en UML?
+-- A) Son iguales
+-- B) Herencia es para clases, realización es para interfaces
+-- C) Realización es para clases, herencia es para interfaces
+-- D) No hay diferencia
+-- RESPUESTA: B
+-- EXPLICACION: Herencia (flecha hueca) es para clases; realización (flecha punteada) es para interfaces

@@ -1,0 +1,2 @@
+-- TEST 1: Mostrar directorio actual
+-- INSTRUCCIONES: Ejecuta el comando para mostrar la ruta actual (pwd)

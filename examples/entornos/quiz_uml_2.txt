@@ -1,0 +1,161 @@
+-- QUIZ: UML - Relaciones, comportamiento y arquitectura
+
+-- PREGUNTA 1: ¿Qué representa un diagrama de casos de uso?
+-- A) La estructura física de servidores
+-- B) Interacciones entre actores y funcionalidades del sistema
+-- C) El código fuente completo
+-- D) El diseño de tablas SQL
+-- RESPUESTA: B
+-- EXPLICACION: Los casos de uso muestran qué esperan conseguir los actores con el sistema.
+
+-- PREGUNTA 2: ¿Qué relación indica que un caso de uso siempre reutiliza otro?
+-- A) include
+-- B) extend
+-- C) compose
+-- D) inherit
+-- RESPUESTA: A
+-- EXPLICACION: include extrae comportamiento común y obligatorio.
+
+-- PREGUNTA 3: ¿Qué relación indica comportamiento opcional o condicional en casos de uso?
+-- A) include
+-- B) extend
+-- C) generalize
+-- D) aggregate
+-- RESPUESTA: B
+-- EXPLICACION: extend añade comportamiento bajo determinadas condiciones.
+
+-- PREGUNTA 4: ¿Qué elemento inicia una interacción en un diagrama de secuencia?
+-- A) Actor u objeto externo
+-- B) Paquete
+-- C) Nodo de despliegue
+-- D) Interfaz gráfica siempre
+-- RESPUESTA: A
+-- EXPLICACION: Un actor u otro participante puede enviar el primer mensaje.
+
+-- PREGUNTA 5: ¿Qué representa la línea de vida en un diagrama de secuencia?
+-- A) El tiempo de existencia de un participante
+-- B) Una herencia
+-- C) Un archivo compilado
+-- D) Un servidor físico
+-- RESPUESTA: A
+-- EXPLICACION: La línea vertical marca la participación del objeto a lo largo del tiempo.
+
+-- PREGUNTA 6: ¿Qué indica una barra de activación en secuencia?
+-- A) Que un objeto está ejecutando una operación
+-- B) Que una clase es abstracta
+-- C) Que un atributo es privado
+-- D) Que un servidor está caído
+-- RESPUESTA: A
+-- EXPLICACION: La activación muestra el periodo en que un participante procesa una acción.
+
+-- PREGUNTA 7: ¿Qué diagrama conviene para modelar decisiones y flujos de trabajo?
+-- A) Diagrama de actividad
+-- B) Diagrama de clases
+-- C) Diagrama de despliegue
+-- D) Diagrama de paquetes
+-- RESPUESTA: A
+-- EXPLICACION: El diagrama de actividad representa flujos, ramas y concurrencia.
+
+-- PREGUNTA 8: ¿Qué símbolo representa una decisión en un diagrama de actividad?
+-- A) Rombo
+-- B) Círculo negro
+-- C) Rectángulo
+-- D) Cubo
+-- RESPUESTA: A
+-- EXPLICACION: El rombo se usa para decisiones y fusiones de flujo.
+
+-- PREGUNTA 9: ¿Qué es una composición en UML?
+-- A) Relación fuerte todo-parte donde la parte depende del todo
+-- B) Una asociación temporal sin dependencia
+-- C) Una herencia múltiple
+-- D) Una llamada HTTP
+-- RESPUESTA: A
+-- EXPLICACION: En composición, la vida de la parte suele depender del objeto contenedor.
+
+-- PREGUNTA 10: ¿Cómo se representa la composición?
+-- A) Diamante negro en el lado del todo
+-- B) Diamante blanco en el lado de la parte
+-- C) Flecha punteada sin etiqueta
+-- D) Círculo vacío
+-- RESPUESTA: A
+-- EXPLICACION: El diamante negro identifica composición.
+
+-- PREGUNTA 11: ¿Cómo se representa la agregación?
+-- A) Diamante blanco en el lado del todo
+-- B) Diamante negro en el lado de la parte
+-- C) Flecha triangular punteada
+-- D) Línea doble
+-- RESPUESTA: A
+-- EXPLICACION: El diamante blanco indica agregación, una relación todo-parte más débil.
+
+-- PREGUNTA 12: ¿Qué significa una clase abstracta en UML?
+-- A) Que no se instancia directamente
+-- B) Que no tiene atributos
+-- C) Que solo existe en la base de datos
+-- D) Que siempre es privada
+-- RESPUESTA: A
+-- EXPLICACION: Una clase abstracta sirve como base para otras clases.
+
+-- PREGUNTA 13: ¿Qué suele indicar una flecha discontinua con punta abierta?
+-- A) Dependencia
+-- B) Composición
+-- C) Agregación
+-- D) Multiplicidad
+-- RESPUESTA: A
+-- EXPLICACION: Las dependencias se muestran con línea discontinua y flecha.
+
+-- PREGUNTA 14: ¿Qué representa un diagrama de paquetes?
+-- A) Organización lógica de elementos del modelo
+-- B) Estados internos de un objeto
+-- C) Mensajes cronológicos
+-- D) Solo clases abstractas
+-- RESPUESTA: A
+-- EXPLICACION: Los paquetes agrupan elementos relacionados y sus dependencias.
+
+-- PREGUNTA 15: ¿Qué representa un nodo en un diagrama de despliegue?
+-- A) Un recurso físico o entorno de ejecución
+-- B) Un atributo privado
+-- C) Una condición de actividad
+-- D) Una multiplicidad
+-- RESPUESTA: A
+-- EXPLICACION: Los nodos modelan máquinas, dispositivos o entornos donde se despliega software.
+
+-- PREGUNTA 16: ¿Qué es un artefacto en despliegue UML?
+-- A) Una pieza desplegable como un ejecutable o paquete
+-- B) Una relación de herencia
+-- C) Un usuario externo
+-- D) Un estado final
+-- RESPUESTA: A
+-- EXPLICACION: Los artefactos son unidades físicas o empaquetadas del software.
+
+-- PREGUNTA 17: ¿Qué diagrama muestra cambios de estado ante eventos?
+-- A) Diagrama de máquina de estados
+-- B) Diagrama de componentes
+-- C) Diagrama de paquetes
+-- D) Diagrama de clases solamente
+-- RESPUESTA: A
+-- EXPLICACION: Las máquinas de estados modelan estados, eventos y transiciones.
+
+-- PREGUNTA 18: ¿Qué representa el estado inicial en una máquina de estados?
+-- A) Un círculo negro sólido
+-- B) Un rectángulo vacío
+-- C) Un rombo blanco
+-- D) Un cubo
+-- RESPUESTA: A
+-- EXPLICACION: El punto negro indica el inicio del flujo de estados.
+
+-- PREGUNTA 19: ¿Qué es una interfaz provista en un diagrama de componentes?
+-- A) Un servicio que el componente ofrece
+-- B) Una dependencia de base de datos
+-- C) Un error de compilación
+-- D) Una clase privada
+-- RESPUESTA: A
+-- EXPLICACION: Una interfaz provista describe capacidades expuestas por el componente.
+
+-- PREGUNTA 20: ¿Cuál es el objetivo principal de UML?
+-- A) Modelar y comunicar diseños de software
+-- B) Ejecutar contenedores
+-- C) Reemplazar todos los lenguajes de programación
+-- D) Administrar paquetes Linux
+-- RESPUESTA: A
+-- EXPLICACION: UML ayuda a visualizar, especificar y comunicar sistemas software.

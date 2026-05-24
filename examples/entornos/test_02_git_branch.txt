@@ -1,0 +1,4 @@
+-- TEST 2: Mostrar ramas locales
+-- PREGUNTA: Escribe el comando para listar las ramas locales del repositorio.
+-- RESPUESTA: git branch
+-- HINT: El comando comienza con git y muestra un listado de ramas.

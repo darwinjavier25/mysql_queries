@@ -1,0 +1,4 @@
+-- TEST 4: Revisar el estado del repositorio
+-- PREGUNTA: Escribe el comando que muestra los archivos modificados, preparados y pendientes en Git.
+-- RESPUESTA: git status
+-- HINT: Es el primer comando que se suele ejecutar para saber cómo está el repositorio.

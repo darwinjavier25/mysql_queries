@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Entornos de Desarrollo - Práctica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .console-output { background: #0d1117; color: #c9d1d9; padding: 1rem; height: 430px; overflow-y: auto; border-radius: 8px; font-family: monospace; font-size: 0.95rem; line-height: 1.45; cursor: text; }
+        .console-line { margin: 0; white-space: pre-wrap; }
+        .terminal-input-line { display: flex; align-items: center; gap: 0.45rem; min-height: 1.45rem; }
+        .terminal-input { flex: 1; min-width: 8rem; background: transparent; border: 0; outline: 0; color: #c9d1d9; font: inherit; padding: 0; caret-color: #7ee787; }
+        .terminal-input::placeholder { color: #6e7681; }
+        .console-command { color: #79c0ff; }
+        .console-prompt { color: #7ee787; }
+        .git-green { color: #3fb950; }
+        .git-red { color: #ff7b72; }
+        .git-yellow { color: #d29922; }
+        .git-blue { color: #58a6ff; }
+        .git-muted { color: #8b949e; }
+        .console-input { font-family: monospace; }
+        .section-card { border-radius: 16px; box-shadow: 0 18px 45px rgba(0,0,0,0.08); }
+        .test-card { border-radius: 12px; }
+        .category-btn { transition: all 0.3s ease; border: 2px solid; }
+        .category-btn:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .question-card { padding: 1.5rem; border: 1px solid #dee2e6; border-radius: 8px; margin-bottom: 1rem; }
+        .option-radio { cursor: pointer; padding: 0.5rem; border-radius: 4px; }
+        .option-radio:hover { background-color: #f8f9fa; }
+        .cmd-item { cursor: pointer; }
+        .lab-card { border: 1px solid #dee2e6; border-radius: 8px; height: 100%; }
+        .lab-btn { min-height: 130px; transition: all 0.2s ease; }
+        .lab-btn:hover { transform: translateY(-2px); }
+        .remote-panel { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; min-height: 430px; }
+        .remote-commit { border-left: 4px solid #3fb950; background: #fff; border-radius: 6px; padding: 0.75rem; margin-bottom: 0.75rem; box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+        .file-chip { display: inline-block; background: #d1e7dd; color: #0f5132; border-radius: 999px; padding: 0.2rem 0.55rem; margin: 0.15rem; font-family: monospace; font-size: 0.85rem; }
+        .example-command { cursor: pointer; }
+        .example-command:hover { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-home me-2"></i>Inicio
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/sql">SQL</a>
+            <a class="nav-link active" href="/entornos">Entornos</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card section-card mb-4">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <h4 class="mb-1">Entornos de Desarrollo</h4>
+                            <p class="text-muted mb-0">Practica comandos de shell, Git y Docker, y completa ejercicios guiados.</p>
+                        </div>
+                        <span class="badge bg-primary">Modo interactivo</span>
+                    </div>
+                    <ul class="nav nav-tabs" id="entornosTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="nav-console-tab" data-bs-toggle="tab" data-bs-target="#nav-console" type="button" role="tab" aria-controls="nav-console" aria-selected="true">
+                                Consola
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="nav-tests-tab" data-bs-toggle="tab" data-bs-target="#nav-tests" type="button" role="tab" aria-controls="nav-tests" aria-selected="false">
+                                Tests prácticos
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-3" id="entornosTabsContent">
+                        <!-- CONSOLE TAB -->
+                        <div class="tab-pane fade show active" id="nav-console" role="tabpanel" aria-labelledby="nav-console-tab">
+                            <div id="labCategoryView">
+                                <h5 class="mb-4">Selecciona un entorno para practicar</h5>
+                                <div class="row gx-3">
+                                    <div class="col-md-6 mb-3">
+                                        <button class="btn btn-lg btn-outline-success w-100 p-4 lab-btn" data-lab="linux">
+                                            <i class="fas fa-terminal fa-2x mb-2"></i><br>
+                                            <strong>Linux</strong><br>
+                                            <small class="text-muted">Sistema de archivos y permisos</small>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <button class="btn btn-lg btn-outline-dark w-100 p-4 lab-btn" data-lab="git">
+                                            <i class="fas fa-code-branch fa-2x mb-2"></i><br>
+                                            <strong>Git</strong><br>
+                                            <small class="text-muted">Simulador local y remoto</small>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <button class="btn btn-lg btn-outline-info w-100 p-4 lab-btn" data-lab="docker">
+                                            <i class="fas fa-cube fa-2x mb-2"></i><br>
+                                            <strong>Docker</strong><br>
+                                            <small class="text-muted">Próximamente</small>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <button class="btn btn-lg btn-outline-warning w-100 p-4 lab-btn" data-lab="uml">
+                                            <i class="fas fa-project-diagram fa-2x mb-2"></i><br>
+                                            <strong>UML</strong><br>
+                                            <small class="text-muted">Próximamente</small>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="linuxLabView" style="display: none;">
+                                <button class="btn btn-secondary btn-sm mb-3" id="backFromLinuxLabBtn"><i class="fas fa-arrow-left me-1"></i>Volver a entornos</button>
+                                <div class="row g-3">
+                                    <div class="col-xl-8 col-lg-7">
+                                        <div class="lab-card bg-dark text-white">
+                                            <div class="p-3 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h5 class="mb-0">Linux local</h5>
+                                                    <small class="text-white-50">Sistema de archivos simulado</small>
+                                                </div>
+                                                <button class="btn btn-outline-light btn-sm" id="resetLinuxLabBtn"><i class="fas fa-redo me-1"></i>Reiniciar</button>
+                                            </div>
+                                            <div class="p-3">
+                                                <div id="linuxTerminal" class="console-output mb-3">
+                                                    <div id="linuxHistory"></div>
+                                                    <div class="terminal-input-line">
+                                                        <span class="console-prompt" id="linuxPrompt">alumno@curso:~$</span>
+                                                        <input id="linuxCommandInput" class="terminal-input" placeholder="ls -la" autocomplete="off" spellcheck="false">
+                                                    </div>
+                                                </div>
+                                                <div class="row g-2">
+                                                    <div class="col-sm-4">
+                                                        <div class="border border-secondary rounded p-2">
+                                                            <small class="text-white-50">Directorio</small><br>
+                                                            <strong class="git-blue" id="linuxCwdText">~</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="border border-secondary rounded p-2">
+                                                            <small class="text-white-50">Archivos</small><br>
+                                                            <strong class="git-green" id="linuxFileCount">0</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="border border-secondary rounded p-2">
+                                                            <small class="text-white-50">Paquetes</small><br>
+                                                            <strong class="git-yellow" id="linuxPackageCount">0</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-5">
+                                        <div class="remote-panel p-3">
+                                            <h5 class="mb-3">Ejemplos Linux</h5>
+                                            <div class="list-group mb-3" id="linuxExamples">
+                                                <button class="list-group-item list-group-item-action example-command" data-command="pwd"><code>pwd</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="ls -la"><code>ls -la</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="mkdir scripts"><code>mkdir scripts</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="cd scripts"><code>cd scripts</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="echo \"echo Hola Linux\" > hola.sh"><code>echo "echo Hola Linux" &gt; hola.sh</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="cat hola.sh"><code>cat hola.sh</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="chmod +x hola.sh"><code>chmod +x hola.sh</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="./hola.sh"><code>./hola.sh</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="apt install tree"><code>apt install tree</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="apt list --installed"><code>apt list --installed</code></button>
+                                            </div>
+                                            <h6>Comandos soportados</h6>
+                                            <p class="text-muted small mb-0">pwd, ls, cd, mkdir, touch, cat, echo, chmod, rm, cp, mv, whoami, apt, clear, history y ejecución de scripts con permisos.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="gitLabView" style="display: none;">
+                                <button class="btn btn-secondary btn-sm mb-3" id="backFromGitLabBtn"><i class="fas fa-arrow-left me-1"></i>Volver a entornos</button>
+                                <div class="row g-3">
+                                    <div class="col-xl-8 col-lg-7">
+                                        <div class="lab-card bg-dark text-white">
+                                            <div class="p-3 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h5 class="mb-0">Git local</h5>
+                                                    <small class="text-white-50">Repositorio simulado en tu navegador</small>
+                                                </div>
+                                                <button class="btn btn-outline-light btn-sm" id="resetGitLabBtn"><i class="fas fa-redo me-1"></i>Reiniciar</button>
+                                            </div>
+                                            <div class="p-3">
+                                                <div id="gitTerminal" class="console-output mb-3">
+                                                    <div id="gitHistory"></div>
+                                                    <div class="terminal-input-line">
+                                                        <span class="console-prompt" id="gitPrompt">~/workspace $</span>
+                                                        <input id="gitCommandInput" class="terminal-input" placeholder="git init" autocomplete="off" spellcheck="false">
+                                                    </div>
+                                                </div>
+                                                <div class="row g-2 mb-3" id="localGitStats">
+                                                    <div class="col-sm-4">
+                                                        <div class="border border-secondary rounded p-2">
+                                                            <small class="text-white-50">Untracked</small><br>
+                                                            <strong class="git-red" id="localUntrackedCount">0</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="border border-secondary rounded p-2">
+                                                            <small class="text-white-50">Staged</small><br>
+                                                            <strong class="git-green" id="localStagedCount">0</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="border border-secondary rounded p-2">
+                                                            <small class="text-white-50">Commits</small><br>
+                                                            <strong class="git-blue" id="localCommitCount">0</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-5">
+                                        <div class="remote-panel p-3">
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div>
+                                                    <h5 class="mb-0">Git remoto</h5>
+                                                    <small class="text-muted" id="remoteUrlText">Sin remoto vinculado</small>
+                                                </div>
+                                                <span class="badge bg-secondary" id="remoteCommitCount">0 commits</span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <h6 class="mb-2">Archivos publicados</h6>
+                                                <div id="remoteFiles"><span class="text-muted small">Haz push para publicar cambios.</span></div>
+                                            </div>
+                                            <hr>
+                                            <h6 class="mb-2">Historial remoto</h6>
+                                            <div id="remoteHistory"><div class="text-muted small">Todavía no hay commits en remoto.</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-light border mt-3 mb-0">
+                                    <strong>Comandos para probar:</strong>
+                                    <code>mkdir proyecto</code>,
+                                    <code>cd proyecto</code>,
+                                    <code>git init</code>,
+                                    <code>touch README.md</code>,
+                                    <code>git status</code>,
+                                    <code>git add README.md</code>,
+                                    <code>git commit -m "primer commit"</code>,
+                                    <code>git remote add origin remoto-clase</code>,
+                                    <code>git push -u origin main</code>.
+                                </div>
+                            </div>
+
+                            <div id="labPlaceholderView" style="display: none;">
+                                <button class="btn btn-secondary btn-sm mb-3" id="backFromPlaceholderBtn"><i class="fas fa-arrow-left me-1"></i>Volver a entornos</button>
+                                <div class="alert alert-info mb-0" id="labPlaceholderText"></div>
+                            </div>
+                        </div>
+
+                        <!-- TESTS TAB -->
+                        <div class="tab-pane fade" id="nav-tests" role="tabpanel" aria-labelledby="nav-tests-tab">
+                            <!-- CATEGORY VIEW -->
+                            <div id="categoryView">
+                                <h5 class="mb-4">Selecciona una categoría para comenzar</h5>
+                                <div class="row gx-3">
+                                    <div class="col-md-6 mb-3">
+                                        <button class="btn btn-lg btn-outline-success w-100 p-4 category-btn" data-category="linux">
+                                            <i class="fas fa-terminal fa-2x mb-2"></i><br>
+                                            <strong>Linux</strong><br>
+                                            <small class="text-muted">Comandos de shell</small>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <button class="btn btn-lg btn-outline-dark w-100 p-4 category-btn" data-category="git">
+                                            <i class="fas fa-code-branch fa-2x mb-2"></i><br>
+                                            <strong>Git</strong><br>
+                                            <small class="text-muted">Control de versiones</small>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <button class="btn btn-lg btn-outline-info w-100 p-4 category-btn" data-category="docker">
+                                            <i class="fas fa-cube fa-2x mb-2"></i><br>
+                                            <strong>Docker</strong><br>
+                                            <small class="text-muted">Contenedores y orquestación</small>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <button class="btn btn-lg btn-outline-warning w-100 p-4 category-btn" data-category="uml">
+                                            <i class="fas fa-project-diagram fa-2x mb-2"></i><br>
+                                            <strong>UML</strong><br>
+                                            <small class="text-muted">Diagramas y modelado</small>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TEST LIST VIEW -->
+                            <div id="testListView" style="display: none;">
+                                <button class="btn btn-secondary btn-sm mb-3" id="backBtn"><i class="fas fa-arrow-left me-1"></i>Volver a categorías</button>
+                                <div class="row" id="testListContainer">
+                                    <!-- Tests will be populated here -->
+                                </div>
+                            </div>
+
+                            <!-- QUIZ TEST VIEW -->
+                            <div id="quizView" style="display: none;">
+                                <button class="btn btn-secondary btn-sm mb-3" id="backFromQuizBtn"><i class="fas fa-arrow-left me-1"></i>Volver</button>
+                                <div class="card test-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start justify-content-between gap-3 mb-2">
+                                            <div>
+                                                <h5 id="quizTitle">Test práctico</h5>
+                                                <p class="text-muted mb-0">20 preguntas, 4 opciones y una única respuesta correcta.</p>
+                                            </div>
+                                            <span class="badge bg-primary" id="quizCounter">0/20</span>
+                                        </div>
+                                        <hr>
+                                        <div id="quizContainer"></div>
+                                        <div class="mt-4 d-flex gap-2">
+                                            <button id="submitQuizBtn" class="btn btn-success"><i class="fas fa-check me-1"></i>Enviar respuestas</button>
+                                            <button id="resetQuizBtn" class="btn btn-outline-secondary"><i class="fas fa-redo me-1"></i>Reiniciar</button>
+                                        </div>
+                                        <div id="quizResult" class="mt-4"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const gitState = {
+    cwd: ['workspace'],
+    dirs: new Set(['workspace']),
+    files: new Set(),
+    initialized: false,
+    branch: 'main',
+    staged: new Set(),
+    commits: [],
+    remoteName: '',
+    remoteUrl: '',
+    remoteCommits: [],
+    remoteFiles: new Set(),
+    dirty: new Set(),
+    commandHistory: [],
+    historyIndex: 0
+};
+
+const linuxState = {
+    cwd: '/home/alumno',
+    entries: new Map(),
+    packages: new Set(['bash', 'coreutils']),
+    commandHistory: [],
+    historyIndex: 0
+};
+
+function appendConsoleOutput(targetId, text, isError=false) {
+    const out = document.getElementById(targetId);
+    const block = document.createElement('div');
+    block.className = 'console-line';
+    block.innerHTML = colorizeGitOutput(text, isError);
+    out.appendChild(block);
+    const terminal = out.closest('.console-output');
+    if (terminal) terminal.scrollTop = terminal.scrollHeight;
+}
+
+function scrollGitTerminalToBottom() {
+    const terminal = document.getElementById('gitTerminal');
+    if (terminal) terminal.scrollTop = terminal.scrollHeight;
+}
+
+function colorizeGitOutput(text, isError=false) {
+    const escaped = escapeHtml(text);
+    if (isError) return `<span class="git-red">${escaped}</span>`;
+
+    return escaped
+        .split('\n')
+        .map(line => {
+            if (line.includes(' $ ')) {
+                const parts = line.split(' $ ');
+                return `<span class="console-prompt">${parts[0]} $</span> <span class="console-command">${parts.slice(1).join(' $ ')}</span>`;
+            }
+            if (line.startsWith('Changes to be committed:') || line.trim().startsWith('staged:')) {
+                return `<span class="git-green">${line}</span>`;
+            }
+            if (line.startsWith('Untracked files:') || line.startsWith('Changes not staged') || line.trim().startsWith('modified:') || line.trim().startsWith('deleted:')) {
+                return `<span class="git-red">${line}</span>`;
+            }
+            if (line.startsWith('On branch') || line.startsWith('Remote:') || line.startsWith('To ') || line.includes('[new branch]')) {
+                return `<span class="git-blue">${line}</span>`;
+            }
+            if (line.startsWith('nothing to commit') || line.startsWith('Everything up-to-date')) {
+                return `<span class="git-muted">${line}</span>`;
+            }
+            if (line.startsWith('Initialized') || line.startsWith('Remoto añadido') || line.startsWith('Añadido') || line.startsWith('Contenido') || line.startsWith('Archivo') || line.startsWith('Directorio')) {
+                return `<span class="git-green">${line}</span>`;
+            }
+            if (line.startsWith('Enumerating objects') || line.startsWith('commit ') || line.startsWith(' * ')) {
+                return `<span class="git-yellow">${line}</span>`;
+            }
+            if (line.startsWith('fatal') || line.includes('no reconocido')) {
+                return `<span class="git-red">${line}</span>`;
+            }
+            return line;
+        })
+        .join('\n');
+}
+
+function currentPath() {
+    return gitState.cwd.join('/');
+}
+
+function relativePath(name) {
+    return `${currentPath()}/${name.replace(/^\/+/, '')}`;
+}
+
+function updateGitPrompt() {
+    document.getElementById('gitPrompt').textContent = `~/${currentPath()} $`;
+}
+
+function getTrackedFiles() {
+    return new Set(gitState.commits.flatMap(commit => commit.files));
+}
+
+function getUntrackedFiles() {
+    const tracked = getTrackedFiles();
+    return [...gitState.files].filter(file => !tracked.has(file) && !gitState.staged.has(file));
+}
+
+function updateLocalStats() {
+    document.getElementById('localUntrackedCount').textContent = getUntrackedFiles().length;
+    document.getElementById('localStagedCount').textContent = gitState.staged.size;
+    document.getElementById('localCommitCount').textContent = gitState.commits.length;
+}
+
+function resetGitState() {
+    gitState.cwd = ['workspace'];
+    gitState.dirs = new Set(['workspace']);
+    gitState.files = new Set();
+    gitState.initialized = false;
+    gitState.branch = 'main';
+    gitState.staged = new Set();
+    gitState.commits = [];
+    gitState.remoteName = '';
+    gitState.remoteUrl = '';
+    gitState.remoteCommits = [];
+    gitState.remoteFiles = new Set();
+    gitState.dirty = new Set();
+    gitState.commandHistory = [];
+    gitState.historyIndex = 0;
+    document.getElementById('gitHistory').innerHTML = '';
+    document.getElementById('gitCommandInput').value = '';
+    appendConsoleOutput('gitHistory', 'Simulador Git preparado. Empieza con: mkdir proyecto');
+    updateGitPrompt();
+    updateLocalStats();
+    renderRemote();
+    scrollGitTerminalToBottom();
+}
+
+function renderRemote() {
+    document.getElementById('remoteUrlText').textContent = gitState.remoteUrl
+        ? `${gitState.remoteName} -> ${gitState.remoteUrl}`
+        : 'Sin remoto vinculado';
+    document.getElementById('remoteCommitCount').textContent = `${gitState.remoteCommits.length} commits`;
+
+    const files = [...gitState.remoteFiles].sort();
+    document.getElementById('remoteFiles').innerHTML = files.length
+        ? files.map(file => `<span class="file-chip">${escapeHtml(file.replace(/^workspace\//, ''))}</span>`).join('')
+        : '<span class="text-muted small">Haz push para publicar cambios.</span>';
+
+    document.getElementById('remoteHistory').innerHTML = gitState.remoteCommits.length
+        ? gitState.remoteCommits.slice().reverse().map(commit => `
+            <div class="remote-commit">
+                <div><strong>${escapeHtml(commit.id)}</strong> ${escapeHtml(commit.message)}</div>
+                <small class="text-muted">${commit.files.length} archivo(s) en ${escapeHtml(commit.branch)}</small>
+            </div>
+        `).join('')
+        : '<div class="text-muted small">Todavía no hay commits en remoto.</div>';
+}
+
+function parseCommand(command) {
+    const matches = command.match(/"[^"]*"|'[^']*'|\S+/g) || [];
+    return matches.map(part => part.replace(/^["']|["']$/g, ''));
+}
+
+function resetLinuxState() {
+    linuxState.cwd = '/home/alumno';
+    linuxState.entries = new Map([
+        ['/', { type: 'dir', mode: '755', content: '' }],
+        ['/home', { type: 'dir', mode: '755', content: '' }],
+        ['/home/alumno', { type: 'dir', mode: '755', content: '' }],
+        ['/home/alumno/README.txt', { type: 'file', mode: '644', content: 'Bienvenido al laboratorio Linux.\nPrueba ls -la, mkdir, cat, chmod y apt install.' }]
+    ]);
+    linuxState.packages = new Set(['bash', 'coreutils']);
+    linuxState.commandHistory = [];
+    linuxState.historyIndex = 0;
+    document.getElementById('linuxHistory').innerHTML = '';
+    document.getElementById('linuxCommandInput').value = '';
+    appendConsoleOutput('linuxHistory', 'Laboratorio Linux preparado. Empieza con: ls -la');
+    updateLinuxPrompt();
+    updateLinuxStats();
+    scrollLinuxTerminalToBottom();
+}
+
+function scrollLinuxTerminalToBottom() {
+    const terminal = document.getElementById('linuxTerminal');
+    if (terminal) terminal.scrollTop = terminal.scrollHeight;
+}
+
+function linuxDisplayPath(path=linuxState.cwd) {
+    return path === '/home/alumno' ? '~' : path.replace('/home/alumno', '~');
+}
+
+function updateLinuxPrompt() {
+    document.getElementById('linuxPrompt').textContent = `alumno@curso:${linuxDisplayPath()}$`;
+}
+
+function updateLinuxStats() {
+    const files = [...linuxState.entries.values()].filter(entry => entry.type === 'file').length;
+    document.getElementById('linuxCwdText').textContent = linuxDisplayPath();
+    document.getElementById('linuxFileCount').textContent = files;
+    document.getElementById('linuxPackageCount').textContent = linuxState.packages.size;
+}
+
+function normalizeLinuxPath(path='') {
+    if (!path || path === '~') return '/home/alumno';
+    let raw = path.startsWith('/') ? path : `${linuxState.cwd}/${path}`;
+    raw = raw.replace(/^~/, '/home/alumno');
+    const parts = [];
+    raw.split('/').forEach(part => {
+        if (!part || part === '.') return;
+        if (part === '..') {
+            parts.pop();
+            return;
+        }
+        parts.push(part);
+    });
+    return `/${parts.join('/')}` || '/';
+}
+
+function basename(path) {
+    return path.split('/').filter(Boolean).pop() || '/';
+}
+
+function parentPath(path) {
+    const parts = path.split('/').filter(Boolean);
+    parts.pop();
+    return `/${parts.join('/')}` || '/';
+}
+
+function ensureParentDir(path) {
+    const parent = parentPath(path);
+    return linuxState.entries.get(parent)?.type === 'dir';
+}
+
+function linuxPermissionString(entry) {
+    const mode = entry.mode || (entry.type === 'dir' ? '755' : '644');
+    const type = entry.type === 'dir' ? 'd' : '-';
+    const map = { '0': '---', '1': '--x', '2': '-w-', '3': '-wx', '4': 'r--', '5': 'r-x', '6': 'rw-', '7': 'rwx' };
+    return type + mode.split('').map(digit => map[digit] || '---').join('');
+}
+
+function listLinuxDir(path, longFormat=false, all=false) {
+    const dir = linuxState.entries.get(path);
+    if (!dir || dir.type !== 'dir') return `ls: no se puede acceder a '${path}': No es un directorio`;
+    const children = [...linuxState.entries.entries()]
+        .filter(([entryPath]) => parentPath(entryPath) === path && entryPath !== path)
+        .sort(([a], [b]) => basename(a).localeCompare(b));
+    const names = [];
+    if (all) {
+        names.push(['.', dir], ['..', linuxState.entries.get(parentPath(path)) || dir]);
+    }
+    children.forEach(([entryPath, entry]) => names.push([basename(entryPath), entry]));
+    if (!longFormat) return names.map(([name]) => name).join('  ') || '(directorio vacío)';
+    return names.map(([name, entry]) => {
+        const size = entry.type === 'file' ? String(entry.content.length).padStart(4, ' ') : '4096';
+        return `${linuxPermissionString(entry)} alumno alumno ${size} ${name}`;
+    }).join('\n') || 'total 0';
+}
+
+function runLinuxSimulation(command) {
+    const parts = parseCommand(command);
+    const base = parts[0];
+    if (!base) return '';
+
+    if (base === 'help') {
+        return 'Comandos: pwd, ls -la, cd, mkdir, touch, cat, echo >, chmod +x/-x/755/644, rm, cp, mv, whoami, apt install, apt list --installed, clear, history';
+    }
+    if (base === 'clear') {
+        document.getElementById('linuxHistory').innerHTML = '';
+        return '';
+    }
+    if (base === 'history') {
+        return linuxState.commandHistory.map((cmd, index) => `${index + 1}  ${cmd}`).join('\n');
+    }
+    if (base === 'pwd') return linuxState.cwd;
+    if (base === 'whoami') return 'alumno';
+    if (base === 'cd') {
+        const target = normalizeLinuxPath(parts[1] || '~');
+        if (linuxState.entries.get(target)?.type !== 'dir') return `cd: ${parts[1] || '~'}: No existe el directorio`;
+        linuxState.cwd = target;
+        updateLinuxPrompt();
+        return '';
+    }
+    if (base === 'ls') {
+        const flags = parts.filter(part => part.startsWith('-')).join('');
+        const targetArg = parts.find((part, index) => index > 0 && !part.startsWith('-'));
+        return listLinuxDir(normalizeLinuxPath(targetArg || '.'), flags.includes('l'), flags.includes('a'));
+    }
+    if (base === 'mkdir') {
+        if (!parts[1]) return 'mkdir: falta el nombre del directorio';
+        const target = normalizeLinuxPath(parts[1]);
+        if (!ensureParentDir(target)) return `mkdir: no se puede crear '${parts[1]}': No existe el directorio padre`;
+        linuxState.entries.set(target, { type: 'dir', mode: '755', content: '' });
+        return `Directorio creado: ${parts[1]}`;
+    }
+    if (base === 'touch') {
+        if (!parts[1]) return 'touch: falta el nombre del archivo';
+        const target = normalizeLinuxPath(parts[1]);
+        if (!ensureParentDir(target)) return `touch: no se puede crear '${parts[1]}': No existe el directorio padre`;
+        const current = linuxState.entries.get(target);
+        linuxState.entries.set(target, { type: 'file', mode: current?.mode || '644', content: current?.content || '' });
+        return `Archivo creado/actualizado: ${parts[1]}`;
+    }
+    if (base === 'cat') {
+        if (!parts[1]) return 'cat: falta el archivo';
+        const target = normalizeLinuxPath(parts[1]);
+        const entry = linuxState.entries.get(target);
+        if (!entry || entry.type !== 'file') return `cat: ${parts[1]}: No existe el archivo`;
+        return entry.content || '';
+    }
+    if (base === 'echo') {
+        const redirect = parts.includes('>>') ? '>>' : parts.includes('>') ? '>' : '';
+        if (!redirect) return parts.slice(1).join(' ');
+        const redirectIndex = parts.indexOf(redirect);
+        const target = normalizeLinuxPath(parts[redirectIndex + 1]);
+        if (!parts[redirectIndex + 1]) return 'echo: falta el archivo de destino';
+        if (!ensureParentDir(target)) return `echo: ${parts[redirectIndex + 1]}: No existe el directorio padre`;
+        const text = parts.slice(1, redirectIndex).join(' ');
+        const previous = linuxState.entries.get(target)?.content || '';
+        linuxState.entries.set(target, {
+            type: 'file',
+            mode: linuxState.entries.get(target)?.mode || '644',
+            content: redirect === '>>' && previous ? `${previous}\n${text}` : text
+        });
+        return `Contenido escrito en ${parts[redirectIndex + 1]}`;
+    }
+    if (base === 'chmod') {
+        if (!parts[1] || !parts[2]) return 'chmod: uso chmod <modo> <archivo>';
+        const target = normalizeLinuxPath(parts[2]);
+        const entry = linuxState.entries.get(target);
+        if (!entry || entry.type !== 'file') return `chmod: ${parts[2]}: No existe el archivo`;
+        if (parts[1] === '+x') entry.mode = '755';
+        else if (parts[1] === '-x') entry.mode = '644';
+        else if (/^[0-7]{3}$/.test(parts[1])) entry.mode = parts[1];
+        else return `chmod: modo no soportado en el simulador: ${parts[1]}`;
+        return `Permisos de ${parts[2]} cambiados a ${entry.mode}`;
+    }
+    if (base === 'rm') {
+        const targetArg = parts[1] === '-r' ? parts[2] : parts[1];
+        if (!targetArg) return 'rm: falta operando';
+        const target = normalizeLinuxPath(targetArg);
+        const entry = linuxState.entries.get(target);
+        if (!entry) return `rm: no se puede borrar '${targetArg}': No existe`;
+        if (entry.type === 'dir' && parts[1] !== '-r') return `rm: no se puede borrar '${targetArg}': Es un directorio`;
+        [...linuxState.entries.keys()].filter(path => path === target || path.startsWith(`${target}/`)).forEach(path => linuxState.entries.delete(path));
+        return `Eliminado: ${targetArg}`;
+    }
+    if (base === 'cp' || base === 'mv') {
+        if (!parts[1] || !parts[2]) return `${base}: faltan operandos`;
+        const source = normalizeLinuxPath(parts[1]);
+        const target = normalizeLinuxPath(parts[2]);
+        const entry = linuxState.entries.get(source);
+        if (!entry || entry.type !== 'file') return `${base}: no existe el archivo '${parts[1]}'`;
+        if (!ensureParentDir(target)) return `${base}: no existe el directorio destino`;
+        linuxState.entries.set(target, { ...entry });
+        if (base === 'mv') linuxState.entries.delete(source);
+        return base === 'cp' ? `Copiado a ${parts[2]}` : `Movido a ${parts[2]}`;
+    }
+    if (base === 'apt') {
+        if (parts[1] === 'install') {
+            const pkg = parts[2];
+            if (!pkg) return 'apt install: falta el nombre del paquete';
+            linuxState.packages.add(pkg);
+            return `Leyendo lista de paquetes...\nInstalando ${pkg}...\n${pkg} instalado correctamente.`;
+        }
+        if (parts[1] === 'list' && parts[2] === '--installed') {
+            return [...linuxState.packages].sort().map(pkg => `${pkg}/stable instalado`).join('\n');
+        }
+        return 'apt: comando soportado: apt install <paquete> o apt list --installed';
+    }
+    if (base.startsWith('./')) {
+        const target = normalizeLinuxPath(base.slice(2));
+        const entry = linuxState.entries.get(target);
+        if (!entry || entry.type !== 'file') return `${base}: No existe el archivo`;
+        if (!linuxPermissionString(entry).includes('x')) return `${base}: Permiso denegado`;
+        if (entry.content.startsWith('echo ')) return entry.content.replace(/^echo\s+/, '');
+        return `Ejecutando ${base}...\n(script simulado sin salida)`;
+    }
+    return `${base}: comando no encontrado`;
+}
+
+function runLinuxCommand() {
+    const input = document.getElementById('linuxCommandInput');
+    const cmd = input.value.trim();
+    if (!cmd) return;
+    linuxState.commandHistory.push(cmd);
+    linuxState.historyIndex = linuxState.commandHistory.length;
+    appendConsoleOutput('linuxHistory', `${document.getElementById('linuxPrompt').textContent} ${cmd}`);
+    input.value = '';
+    const result = runLinuxSimulation(cmd);
+    if (result) appendConsoleOutput('linuxHistory', result, result.includes('No existe') || result.includes('denegado') || result.includes('no encontrado'));
+    updateLinuxStats();
+    scrollLinuxTerminalToBottom();
+}
+
+function requireGitRepo() {
+    if (!gitState.initialized) {
+        return 'fatal: no es un repositorio git. Ejecuta git init primero.';
+    }
+    return '';
+}
+
+function runGitSimulation(command) {
+    const parts = parseCommand(command);
+    const base = parts[0];
+
+    if (!base) return '';
+
+    if (base === 'help') {
+        return 'Comandos: mkdir, cd, pwd, ls, touch, git init, git status, git add, git commit -m, git log, git branch, git remote add origin, git remote -v, git push -u origin main';
+    }
+
+    if (base === 'pwd') {
+        return `/${currentPath()}`;
+    }
+
+    if (base === 'mkdir') {
+        if (!parts[1]) return 'mkdir: falta el nombre del directorio';
+        const dir = relativePath(parts[1]);
+        gitState.dirs.add(dir);
+        return `Directorio creado: ${parts[1]}`;
+    }
+
+    if (base === 'cd') {
+        if (!parts[1] || parts[1] === '~') {
+            gitState.cwd = ['workspace'];
+            updateGitPrompt();
+            return '';
+        }
+        if (parts[1] === '..') {
+            if (gitState.cwd.length > 1) gitState.cwd.pop();
+            updateGitPrompt();
+            return '';
+        }
+        const dir = relativePath(parts[1]);
+        if (!gitState.dirs.has(dir)) return `cd: no existe el directorio: ${parts[1]}`;
+        gitState.cwd.push(parts[1]);
+        updateGitPrompt();
+        return '';
+    }
+
+    if (base === 'ls') {
+        const prefix = `${currentPath()}/`;
+        const entries = new Set();
+        gitState.dirs.forEach(dir => {
+            if (dir.startsWith(prefix)) {
+                const rest = dir.slice(prefix.length).split('/')[0];
+                if (rest) entries.add(`${rest}/`);
+            }
+        });
+        gitState.files.forEach(file => {
+            if (file.startsWith(prefix)) {
+                const rest = file.slice(prefix.length).split('/')[0];
+                if (rest) entries.add(rest);
+            }
+        });
+        return [...entries].sort().join('\n') || '(directorio vacío)';
+    }
+
+    if (base === 'touch') {
+        if (!parts[1]) return 'touch: falta el nombre del archivo';
+        const file = relativePath(parts[1]);
+        gitState.files.add(file);
+        if (gitState.initialized) gitState.dirty.add(file);
+        return `Archivo creado/modificado: ${parts[1]}`;
+    }
+
+    if (base === 'echo' && parts.includes('>')) {
+        const redirectIndex = parts.indexOf('>');
+        const filename = parts[redirectIndex + 1];
+        if (!filename) return 'echo: falta el archivo de destino';
+        const file = relativePath(filename);
+        gitState.files.add(file);
+        if (gitState.initialized) gitState.dirty.add(file);
+        return `Contenido escrito en: ${filename}`;
+    }
+
+    if (base !== 'git') {
+        return `Comando no reconocido en este simulador: ${base}`;
+    }
+
+    const sub = parts[1];
+    if (sub === 'remore') {
+        return 'git: "remore" no existe. Prueba con: git remote add origin remoto-clase';
+    }
+
+    if (sub === 'init') {
+        gitState.initialized = true;
+        gitState.branch = 'main';
+        return `Initialized empty Git repository in /${currentPath()}/.git/`;
+    }
+
+    const repoError = requireGitRepo();
+    if (repoError) return repoError;
+
+    if (sub === 'status') {
+        const untracked = getUntrackedFiles();
+        const modified = [...gitState.dirty].filter(file => !gitState.staged.has(file) && !untracked.includes(file));
+        const staged = [...gitState.staged];
+        let output = `On branch ${gitState.branch}\n`;
+        output += gitState.remoteUrl ? `Remote: ${gitState.remoteName} (${gitState.remoteUrl})\n` : 'No remote configured\n';
+        if (!staged.length && !untracked.length && !modified.length) return `${output}\nnothing to commit, working tree clean`;
+        if (staged.length) output += `\nChanges to be committed:\n${staged.map(file => `  staged: ${file.replace(/^workspace\//, '')}`).join('\n')}\n`;
+        if (modified.length) output += `\nChanges not staged for commit:\n${modified.map(file => `  modified: ${file.replace(/^workspace\//, '')}`).join('\n')}\n`;
+        if (untracked.length) output += `\nUntracked files:\n${untracked.map(file => `  ${file.replace(/^workspace\//, '')}`).join('\n')}`;
+        return output;
+    }
+
+    if (sub === 'add') {
+        if (!parts[2]) return 'git add: falta archivo o .';
+        const targets = parts[2] === '.'
+            ? [...gitState.files].filter(file => file.startsWith(currentPath()))
+            : [relativePath(parts[2])];
+        const missing = targets.filter(file => !gitState.files.has(file));
+        if (missing.length) return `fatal: pathspec '${parts[2]}' did not match any files`;
+        targets.forEach(file => {
+            gitState.staged.add(file);
+            gitState.dirty.delete(file);
+        });
+        return `Añadido al staging: ${parts[2]}`;
+    }
+
+    if (sub === 'commit') {
+        const messageIndex = parts.indexOf('-m');
+        const message = messageIndex >= 0 ? parts[messageIndex + 1] : '';
+        if (!gitState.staged.size) return 'nothing to commit, working tree clean';
+        if (!message) return 'Aborting commit due to empty commit message.';
+        const id = `c${String(gitState.commits.length + 1).padStart(3, '0')}`;
+        const files = [...new Set([
+            ...gitState.commits.flatMap(commit => commit.files),
+            ...gitState.staged
+        ])].sort();
+        gitState.commits.push({ id, message, branch: gitState.branch, files });
+        gitState.staged.clear();
+        return `[${gitState.branch} ${id}] ${message}\n ${files.length} file(s) tracked`;
+    }
+
+    if (sub === 'log') {
+        if (!gitState.commits.length) return 'fatal: your current branch does not have any commits yet';
+        return gitState.commits.slice().reverse().map(commit => `commit ${commit.id}\n    ${commit.message}`).join('\n\n');
+    }
+
+    if (sub === 'branch') {
+        return `* ${gitState.branch}`;
+    }
+
+    if (sub === 'remote' && parts[2] === 'add') {
+        if (!parts[3] || !parts[4]) return 'uso: git remote add <nombre> <url>';
+        gitState.remoteName = parts[3];
+        gitState.remoteUrl = parts[4];
+        renderRemote();
+        return `Remoto añadido: ${gitState.remoteName} -> ${gitState.remoteUrl}`;
+    }
+
+    if (sub === 'remote' && parts[2] === '-v') {
+        if (!gitState.remoteUrl) return '';
+        return `${gitState.remoteName}\t${gitState.remoteUrl} (fetch)\n${gitState.remoteName}\t${gitState.remoteUrl} (push)`;
+    }
+
+    if (sub === 'push') {
+        if (!gitState.remoteUrl) return 'fatal: no configured push destination. Usa git remote add origin remoto-clase';
+        if (!gitState.commits.length) return 'Everything up-to-date. No hay commits locales para subir.';
+        gitState.remoteCommits = gitState.commits.map(commit => ({ ...commit, files: [...commit.files] }));
+        gitState.remoteFiles = new Set(gitState.commits[gitState.commits.length - 1].files);
+        renderRemote();
+        return `Enumerating objects: ${gitState.commits.length}\nTo ${gitState.remoteUrl}\n * [new branch]      ${gitState.branch} -> ${gitState.branch}`;
+    }
+
+    return `git: subcomando no soportado todavía: ${sub || ''}`;
+}
+
+function runGitCommand() {
+    const input = document.getElementById('gitCommandInput');
+    const cmd = input.value.trim();
+    if (!cmd) return;
+    gitState.commandHistory.push(cmd);
+    gitState.historyIndex = gitState.commandHistory.length;
+    appendConsoleOutput('gitHistory', `${document.getElementById('gitPrompt').textContent} ${cmd}`);
+    input.value = '';
+    const result = runGitSimulation(cmd);
+    if (result) appendConsoleOutput('gitHistory', result, result.startsWith('fatal') || result.includes('no reconocido'));
+    updateLocalStats();
+    scrollGitTerminalToBottom();
+}
+
+document.querySelectorAll('.lab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const lab = this.getAttribute('data-lab');
+        document.getElementById('labCategoryView').style.display = 'none';
+        if (lab === 'linux') {
+            document.getElementById('linuxLabView').style.display = 'block';
+            document.getElementById('gitLabView').style.display = 'none';
+            document.getElementById('labPlaceholderView').style.display = 'none';
+            if (!document.getElementById('linuxHistory').children.length) resetLinuxState();
+            document.getElementById('linuxCommandInput').focus();
+            return;
+        }
+        if (lab === 'git') {
+            document.getElementById('linuxLabView').style.display = 'none';
+            document.getElementById('gitLabView').style.display = 'block';
+            document.getElementById('labPlaceholderView').style.display = 'none';
+            if (!document.getElementById('gitHistory').children.length) resetGitState();
+            document.getElementById('gitCommandInput').focus();
+            return;
+        }
+        document.getElementById('linuxLabView').style.display = 'none';
+        document.getElementById('gitLabView').style.display = 'none';
+        document.getElementById('labPlaceholderView').style.display = 'block';
+        document.getElementById('labPlaceholderText').textContent = `El laboratorio de ${this.querySelector('strong').textContent} se añadirá en la siguiente iteración.`;
+    });
+});
+
+document.getElementById('backFromLinuxLabBtn').addEventListener('click', () => {
+    document.getElementById('linuxLabView').style.display = 'none';
+    document.getElementById('labCategoryView').style.display = 'block';
+});
+
+document.getElementById('backFromGitLabBtn').addEventListener('click', () => {
+    document.getElementById('gitLabView').style.display = 'none';
+    document.getElementById('labCategoryView').style.display = 'block';
+});
+
+document.getElementById('backFromPlaceholderBtn').addEventListener('click', () => {
+    document.getElementById('labPlaceholderView').style.display = 'none';
+    document.getElementById('labCategoryView').style.display = 'block';
+});
+
+document.getElementById('resetLinuxLabBtn').addEventListener('click', resetLinuxState);
+document.getElementById('resetGitLabBtn').addEventListener('click', resetGitState);
+document.getElementById('linuxTerminal').addEventListener('click', () => {
+    document.getElementById('linuxCommandInput').focus();
+});
+document.getElementById('gitTerminal').addEventListener('click', () => {
+    document.getElementById('gitCommandInput').focus();
+});
+document.querySelectorAll('#linuxExamples .example-command').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.getElementById('linuxCommandInput').value = this.getAttribute('data-command');
+        document.getElementById('linuxCommandInput').focus();
+    });
+});
+document.getElementById('linuxCommandInput').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        runLinuxCommand();
+        return;
+    }
+    if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (!linuxState.commandHistory.length) return;
+        linuxState.historyIndex = Math.max(0, linuxState.historyIndex - 1);
+        event.target.value = linuxState.commandHistory[linuxState.historyIndex] || '';
+    }
+    if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        if (!linuxState.commandHistory.length) return;
+        linuxState.historyIndex = Math.min(linuxState.commandHistory.length, linuxState.historyIndex + 1);
+        event.target.value = linuxState.commandHistory[linuxState.historyIndex] || '';
+    }
+});
+document.getElementById('gitCommandInput').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        runGitCommand();
+        return;
+    }
+    if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (!gitState.commandHistory.length) return;
+        gitState.historyIndex = Math.max(0, gitState.historyIndex - 1);
+        event.target.value = gitState.commandHistory[gitState.historyIndex] || '';
+    }
+    if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        if (!gitState.commandHistory.length) return;
+        gitState.historyIndex = Math.min(gitState.commandHistory.length, gitState.historyIndex + 1);
+        event.target.value = gitState.commandHistory[gitState.historyIndex] || '';
+    }
+});
+
+// Category button handlers
+document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const category = this.getAttribute('data-category');
+        loadTestList(category);
+    });
+});
+
+let selectedCategory = '';
+let currentQuizFile = '';
+let currentQuestions = [];
+
+function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value || '';
+    return div.innerHTML;
+}
+
+async function loadTestList(category) {
+    selectedCategory = category;
+    document.getElementById('categoryView').style.display = 'none';
+    document.getElementById('testListView').style.display = 'block';
+    document.getElementById('quizView').style.display = 'none';
+    document.getElementById('testListContainer').innerHTML = `
+        <div class="col-12 text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2 mb-0">Cargando tests prácticos...</p>
+        </div>
+    `;
+    
+    const res = await fetch(`/entornos/api/quiz-list?category=${encodeURIComponent(category)}`);
+    const data = await res.json();
+    
+    let html = '';
+    if (data.success && data.quizzes && data.quizzes.length > 0) {
+        data.quizzes.forEach((quiz, index) => {
+            html += `
+                <div class="col-md-6 mb-3">
+                    <button class="btn btn-outline-secondary w-100 h-100 p-3 quiz-btn text-start" data-file="${escapeHtml(quiz.filename)}">
+                        <strong>${escapeHtml(quiz.title || `Test ${index + 1}`)}</strong><br>
+                        <small class="text-muted">${quiz.question_count || 20} preguntas multirrespuesta</small>
+                    </button>
+                </div>
+            `;
+        });
+    } else if (data.success) {
+        html = `
+            <div class="col-12">
+                <div class="alert alert-info mb-0">
+                    Todavía no hay tests para esta categoría.
+                </div>
+            </div>
+        `;
+    } else {
+        html = `
+            <div class="col-12">
+                <div class="alert alert-danger mb-0">${escapeHtml(data.error || 'No se pudieron cargar los tests.')}</div>
+            </div>
+        `;
+    }
+    
+    document.getElementById('testListContainer').innerHTML = html;
+    
+    document.querySelectorAll('.quiz-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            loadQuiz(this.getAttribute('data-file'));
+        });
+    });
+}
+
+async function loadQuiz(filename) {
+    document.getElementById('testListView').style.display = 'none';
+    document.getElementById('quizView').style.display = 'block';
+    document.getElementById('quizResult').innerHTML = '';
+    document.getElementById('quizContainer').innerHTML = `
+        <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2 mb-0">Cargando preguntas...</p>
+        </div>
+    `;
+    
+    const res = await fetch(`/entornos/api/load-quiz?file=${encodeURIComponent(filename)}`);
+    const data = await res.json();
+    
+    if (!data.success) {
+        document.getElementById('quizContainer').innerHTML = `<div class="alert alert-danger">${escapeHtml(data.error)}</div>`;
+        return;
+    }
+    
+    currentQuizFile = data.filename;
+    currentQuestions = data.questions || [];
+    document.getElementById('quizTitle').textContent = data.title || 'Test práctico';
+    document.getElementById('quizCounter').textContent = `0/${currentQuestions.length}`;
+    renderQuizQuestions();
+}
+
+function renderQuizQuestions() {
+    document.getElementById('quizContainer').innerHTML = currentQuestions.map((question, index) => {
+        const options = question.options.map(option => {
+            const inputId = `q${index}_${option.letter}`;
+            return `
+                <div class="form-check option-radio">
+                    <input class="form-check-input quiz-answer" type="radio" name="q${index}" id="${inputId}" value="${escapeHtml(option.letter)}">
+                    <label class="form-check-label" for="${inputId}">
+                        <strong>${escapeHtml(option.letter)})</strong> ${escapeHtml(option.text)}
+                    </label>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="question-card" id="question-${index}">
+                <h6>Pregunta ${index + 1}/${currentQuestions.length}</h6>
+                <p><strong>${escapeHtml(question.text)}</strong></p>
+                ${options}
+                <div class="question-feedback mt-2" id="feedback-${index}"></div>
+            </div>
+        `;
+    }).join('');
+
+    document.querySelectorAll('.quiz-answer').forEach(input => {
+        input.addEventListener('change', updateQuizCounter);
+    });
+}
+
+function updateQuizCounter() {
+    const answered = new Set([...document.querySelectorAll('.quiz-answer:checked')].map(input => input.name));
+    document.getElementById('quizCounter').textContent = `${answered.size}/${currentQuestions.length}`;
+}
+
+document.getElementById('backBtn').addEventListener('click', () => {
+    document.getElementById('testListView').style.display = 'none';
+    document.getElementById('categoryView').style.display = 'block';
+});
+
+document.getElementById('backFromQuizBtn').addEventListener('click', () => {
+    document.getElementById('quizView').style.display = 'none';
+    document.getElementById('testListView').style.display = 'block';
+});
+
+document.getElementById('submitQuizBtn').addEventListener('click', async () => {
+    if (!currentQuizFile) return;
+    const answers = {};
+    document.querySelectorAll('.quiz-answer:checked').forEach(input => {
+        answers[input.name] = input.value;
+    });
+
+    if (Object.keys(answers).length < currentQuestions.length) {
+        document.getElementById('quizResult').innerHTML = '<div class="alert alert-warning">Responde todas las preguntas antes de enviar.</div>';
+        return;
+    }
+
+    const res = await fetch('/entornos/api/validate-quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ file: currentQuizFile, answers })
+    });
+    const data = await res.json();
+
+    if (!data.success) {
+        document.getElementById('quizResult').innerHTML = `<div class="alert alert-danger">${escapeHtml(data.error || 'No se pudo validar el test.')}</div>`;
+        return;
+    }
+
+    data.results.forEach(result => {
+        const feedback = document.getElementById(`feedback-${result.question_id}`);
+        feedback.innerHTML = result.is_correct
+            ? '<div class="alert alert-success py-2 mb-0">Correcta.</div>'
+            : `<div class="alert alert-danger py-2 mb-0">Incorrecta. Respuesta correcta: <strong>${escapeHtml(result.correct_answer)}</strong>. ${escapeHtml(result.explanation || '')}</div>`;
+    });
+
+    document.getElementById('quizResult').innerHTML = `
+        <div class="alert ${data.score_percentage >= 70 ? 'alert-success' : 'alert-warning'}">
+            <strong>Resultado:</strong> ${data.correct_count}/${data.total_questions} correctas (${data.score_percentage}%).
+        </div>
+    `;
+});
+
+document.getElementById('resetQuizBtn').addEventListener('click', () => {
+    document.querySelectorAll('.quiz-answer').forEach(input => {
+        input.checked = false;
+    });
+    document.querySelectorAll('.question-feedback').forEach(feedback => {
+        feedback.innerHTML = '';
+    });
+    document.getElementById('quizResult').innerHTML = '';
+    updateQuizCounter();
+});
+</script>
+
+</body>
+</html>

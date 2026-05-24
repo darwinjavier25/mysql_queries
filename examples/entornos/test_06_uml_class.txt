@@ -1,0 +1,4 @@
+-- TEST 6: Clase en UML
+-- PREGUNTA: Escribe el nombre del diagrama UML que representa clases, atributos, métodos y relaciones.
+-- RESPUESTA: diagrama de clases
+-- HINT: Es el diagrama estructural más habitual en programación orientada a objetos.

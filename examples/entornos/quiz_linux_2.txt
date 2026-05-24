@@ -1,0 +1,161 @@
+-- QUIZ: Linux - Scripts y Administración
+
+-- PREGUNTA 1: ¿Cuál es la primera línea de un script bash?
+-- A) #!/bin/bash
+-- B) #! /bin/bash
+-- C) /usr/bin/bash
+-- D) bash -x
+-- RESPUESTA: A
+-- EXPLICACION: #!/bin/bash es el shebang que indica que el archivo es un script bash
+
+-- PREGUNTA 2: ¿Qué comando da permisos de ejecución a un script?
+-- A) chmod +x script.sh
+-- B) chperm +x script.sh
+-- C) chmod execute script.sh
+-- D) permit +x script.sh
+-- RESPUESTA: A
+-- EXPLICACION: chmod +x agrega permisos de ejecución al propietario
+
+-- PREGUNTA 3: ¿Cómo se define una variable en bash?
+-- A) variable = valor
+-- B) set variable = valor
+-- C) variable=valor
+-- D) $variable = valor
+-- RESPUESTA: C
+-- EXPLICACION: En bash las variables se definen sin espacios alrededor de =
+
+-- PREGUNTA 4: ¿Cómo se accede al valor de una variable?
+-- A) variable
+-- B) $variable
+-- C) #variable
+-- D) &variable
+-- RESPUESTA: B
+-- EXPLICACION: Se usa $ para acceder al valor de una variable
+
+-- PREGUNTA 5: ¿Cuál es el comando para cambiar el propietario de un archivo?
+-- A) chown usuario archivo
+-- B) chmod usuario archivo
+-- C) chprop usuario archivo
+-- D) setowner usuario archivo
+-- RESPUESTA: A
+-- EXPLICACION: chown (change owner) cambia el propietario de un archivo
+
+-- PREGUNTA 6: ¿Qué comando muestra el espacio en disco?
+-- A) space
+-- B) disk
+-- C) df
+-- D) diskfree
+-- RESPUESTA: C
+-- EXPLICACION: df (disk free) muestra el espacio disponible en disco
+
+-- PREGUNTA 7: ¿Cómo se redirige la salida a un archivo?
+-- A) comando > archivo
+-- B) comando < archivo
+-- C) comando >> archivo
+-- D) comando &> archivo
+-- RESPUESTA: A
+-- EXPLICACION: > redirige la salida a un archivo (sobrescribe)
+
+-- PREGUNTA 8: ¿Cuál es la diferencia entre > y >>?
+-- A) Son iguales
+-- B) > sobrescribe, >> añade al final
+-- C) >> sobrescribe, > añade
+-- D) > es para archivos, >> para directorios
+-- RESPUESTA: B
+-- EXPLICACION: > crea/sobrescribe, >> añade contenido al final
+
+-- PREGUNTA 9: ¿Qué comando instala paquetes en Ubuntu?
+-- A) install
+-- B) pkg
+-- C) apt-get o apt
+-- D) yum
+-- RESPUESTA: C
+-- EXPLICACION: apt-get install o apt install instalan paquetes en sistemas Debian/Ubuntu
+
+-- PREGUNTA 10: ¿Cómo se ejecuta un comando con permisos elevados?
+-- A) run admin comando
+-- B) sudo comando
+-- C) superuser comando
+-- D) admin -x comando
+-- RESPUESTA: B
+-- EXPLICACION: sudo ejecuta comandos como superusuario
+
+-- PREGUNTA 11: ¿Cuál es el comando para ver los usuarios del sistema?
+-- A) users
+-- B) cat /etc/passwd
+-- C) whoami -all
+-- D) list-users
+-- RESPUESTA: B
+-- EXPLICACION: cat /etc/passwd muestra la lista de usuarios del sistema
+
+-- PREGUNTA 12: ¿Qué archivo contiene las contraseñas hasheadas?
+-- A) /etc/passwd
+-- B) /etc/shadow
+-- C) /etc/users
+-- D) /etc/pw
+-- RESPUESTA: B
+-- EXPLICACION: /etc/shadow contiene las contraseñas cifradas (solo accesible por root)
+
+-- PREGUNTA 13: ¿Cuál es el comando para comprimir archivos?
+-- A) compress
+-- B) tar
+-- C) zip o tar
+-- D) pack
+-- RESPUESTA: C
+-- EXPLICACION: tar y zip son comandos comunes para comprimir archivos
+
+-- PREGUNTA 14: ¿Cómo se descomprime un archivo .tar.gz?
+-- A) tar -xvf archivo.tar.gz
+-- B) unzip archivo.tar.gz
+-- C) extract archivo.tar.gz
+-- D) tar -zf archivo.tar.gz
+-- RESPUESTA: A
+-- EXPLICACION: tar -xvf extrae un archivo comprimido (x=extract, v=verbose, f=file)
+
+-- PREGUNTA 15: ¿Qué comando busca procesos en ejecución?
+-- A) process
+-- B) ps
+-- C) top
+-- D) Ambas (ps y top)
+-- RESPUESTA: D
+-- EXPLICACION: ps lista procesos, top muestra procesos en tiempo real
+
+-- PREGUNTA 16: ¿Cómo se termina un proceso?
+-- A) kill PID
+-- B) stop PID
+-- C) terminate PID
+-- D) end PID
+-- RESPUESTA: A
+-- EXPLICACION: kill envía una señal para terminar un proceso
+
+-- PREGUNTA 17: ¿Qué comando muestra las conexiones de red?
+-- A) netstat
+-- B) network
+-- C) connect
+-- D) ipconfig
+-- RESPUESTA: A
+-- EXPLICACION: netstat muestra información de conexiones de red
+
+-- PREGUNTA 18: ¿Cuál es el archivo de configuración de red principal?
+-- A) /etc/network/interfaces
+-- B) /etc/networkcfg
+-- C) /etc/eth0
+-- D) /etc/ip
+-- RESPUESTA: A
+-- EXPLICACION: /etc/network/interfaces (o /etc/netplan/ en sistemas modernos) configura la red
+
+-- PREGUNTA 19: ¿Qué comando actualiza el sistema?
+-- A) update
+-- B) apt-get update && apt-get upgrade
+-- C) upgrade
+-- D) patch
+-- RESPUESTA: B
+-- EXPLICACION: apt-get update && apt-get upgrade actualiza paquetes
+
+-- PREGUNTA 20: ¿Cuál es el comando para cambiar la contraseña?
+-- A) change-password
+-- B) passwd
+-- C) password
+-- D) pwd -change
+-- RESPUESTA: B
+-- EXPLICACION: passwd permite cambiar la contraseña del usuario actual

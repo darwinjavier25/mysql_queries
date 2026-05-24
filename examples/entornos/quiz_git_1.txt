@@ -1,0 +1,161 @@
+-- QUIZ: Git - Fundamentos y flujo básico
+
+-- PREGUNTA 1: ¿Qué comando inicializa un repositorio Git en la carpeta actual?
+-- A) git start
+-- B) git init
+-- C) git new
+-- D) git create
+-- RESPUESTA: B
+-- EXPLICACION: git init crea la estructura interna necesaria para empezar a versionar un proyecto.
+
+-- PREGUNTA 2: ¿Qué comando muestra el estado de los archivos del repositorio?
+-- A) git show
+-- B) git status
+-- C) git files
+-- D) git check
+-- RESPUESTA: B
+-- EXPLICACION: git status indica archivos modificados, preparados y sin seguimiento.
+
+-- PREGUNTA 3: ¿Qué comando añade un archivo al área de preparación?
+-- A) git stage archivo
+-- B) git add archivo
+-- C) git save archivo
+-- D) git track archivo
+-- RESPUESTA: B
+-- EXPLICACION: git add prepara cambios para incluirlos en el siguiente commit.
+
+-- PREGUNTA 4: ¿Qué comando crea un commit con mensaje?
+-- A) git commit -m "mensaje"
+-- B) git save -m "mensaje"
+-- C) git snapshot "mensaje"
+-- D) git add -m "mensaje"
+-- RESPUESTA: A
+-- EXPLICACION: git commit guarda los cambios preparados en el historial.
+
+-- PREGUNTA 5: ¿Qué comando lista las ramas locales?
+-- A) git branches
+-- B) git branch
+-- C) git list branch
+-- D) git show branches
+-- RESPUESTA: B
+-- EXPLICACION: git branch sin argumentos muestra las ramas locales.
+
+-- PREGUNTA 6: ¿Qué comando crea una rama nueva llamada feature?
+-- A) git branch feature
+-- B) git checkout feature
+-- C) git new feature
+-- D) git make feature
+-- RESPUESTA: A
+-- EXPLICACION: git branch nombre crea una rama sin cambiarse a ella.
+
+-- PREGUNTA 7: ¿Qué comando cambia a una rama llamada develop?
+-- A) git move develop
+-- B) git checkout develop
+-- C) git branch develop
+-- D) git go develop
+-- RESPUESTA: B
+-- EXPLICACION: git checkout cambia la rama activa.
+
+-- PREGUNTA 8: ¿Qué comando moderno crea y cambia a una rama nueva?
+-- A) git switch -c nueva-rama
+-- B) git branch -m nueva-rama
+-- C) git commit -c nueva-rama
+-- D) git remote -c nueva-rama
+-- RESPUESTA: A
+-- EXPLICACION: git switch -c crea la rama y se mueve a ella.
+
+-- PREGUNTA 9: ¿Qué comando muestra el historial de commits?
+-- A) git history
+-- B) git log
+-- C) git commits
+-- D) git timeline
+-- RESPUESTA: B
+-- EXPLICACION: git log enseña el historial del repositorio.
+
+-- PREGUNTA 10: ¿Qué comando muestra diferencias no preparadas?
+-- A) git diff
+-- B) git status -d
+-- C) git compare
+-- D) git changes
+-- RESPUESTA: A
+-- EXPLICACION: git diff compara el árbol de trabajo con el área preparada.
+
+-- PREGUNTA 11: ¿Qué comando muestra diferencias ya preparadas?
+-- A) git diff --cached
+-- B) git diff --new
+-- C) git show --worktree
+-- D) git compare --added
+-- RESPUESTA: A
+-- EXPLICACION: --cached o --staged muestra lo que entraría en el commit.
+
+-- PREGUNTA 12: ¿Qué significa que un archivo esté untracked?
+-- A) Que Git lo está ignorando siempre
+-- B) Que existe pero Git todavía no lo sigue
+-- C) Que ya está en el último commit
+-- D) Que tiene conflictos
+-- RESPUESTA: B
+-- EXPLICACION: Un archivo untracked no forma parte del historial hasta usar git add.
+
+-- PREGUNTA 13: ¿Qué archivo se usa para indicar patrones que Git debe ignorar?
+-- A) .gitconfig
+-- B) .gitignore
+-- C) git.ignore
+-- D) ignore.git
+-- RESPUESTA: B
+-- EXPLICACION: .gitignore contiene rutas o patrones excluidos del seguimiento.
+
+-- PREGUNTA 14: ¿Qué comando clona un repositorio remoto?
+-- A) git copy URL
+-- B) git clone URL
+-- C) git download URL
+-- D) git remote URL
+-- RESPUESTA: B
+-- EXPLICACION: git clone descarga el repositorio y configura el remoto origin.
+
+-- PREGUNTA 15: ¿Qué nombre suele tener el remoto principal por defecto?
+-- A) main
+-- B) master
+-- C) origin
+-- D) upstream
+-- RESPUESTA: C
+-- EXPLICACION: origin es el nombre habitual del remoto creado al clonar.
+
+-- PREGUNTA 16: ¿Qué comando envía commits locales al remoto?
+-- A) git upload
+-- B) git push
+-- C) git send
+-- D) git publish
+-- RESPUESTA: B
+-- EXPLICACION: git push sube los commits de la rama al repositorio remoto.
+
+-- PREGUNTA 17: ¿Qué comando trae cambios del remoto y los integra?
+-- A) git pull
+-- B) git fetch-only
+-- C) git receive
+-- D) git update-local
+-- RESPUESTA: A
+-- EXPLICACION: git pull equivale a traer cambios y fusionarlos o rebasarlos.
+
+-- PREGUNTA 18: ¿Qué comando solo descarga información del remoto sin integrar cambios?
+-- A) git pull
+-- B) git fetch
+-- C) git clone
+-- D) git push
+-- RESPUESTA: B
+-- EXPLICACION: git fetch actualiza referencias remotas sin modificar la rama actual.
+
+-- PREGUNTA 19: ¿Qué comando muestra la URL de los remotos configurados?
+-- A) git remote -v
+-- B) git origin
+-- C) git url
+-- D) git config remote
+-- RESPUESTA: A
+-- EXPLICACION: git remote -v lista remotos y sus URLs de fetch y push.
+
+-- PREGUNTA 20: ¿Qué comando fusiona otra rama en la rama actual?
+-- A) git join rama
+-- B) git merge rama
+-- C) git combine rama
+-- D) git attach rama
+-- RESPUESTA: B
+-- EXPLICACION: git merge integra cambios de otra rama en la rama activa.

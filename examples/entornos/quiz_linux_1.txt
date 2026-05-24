@@ -1,0 +1,161 @@
+-- QUIZ: Linux Shell - Comandos Básicos
+
+-- PREGUNTA 1: ¿Cuál es el comando para mostrar el directorio actual?
+-- A) pwd
+-- B) dir
+-- C) current
+-- D) show_dir
+-- RESPUESTA: A
+-- EXPLICACION: pwd (Print Working Directory) muestra la ruta del directorio actual
+
+-- PREGUNTA 2: ¿Qué comando lista los archivos en un directorio?
+-- A) dir
+-- B) ls
+-- C) list
+-- D) show
+-- RESPUESTA: B
+-- EXPLICACION: ls lista el contenido de un directorio (list)
+
+-- PREGUNTA 3: ¿Cómo se cambia de directorio en Linux?
+-- A) goto directorio
+-- B) move directorio
+-- C) cd directorio
+-- D) chdir directorio
+-- RESPUESTA: C
+-- EXPLICACION: cd (Change Directory) cambia al directorio especificado
+
+-- PREGUNTA 4: ¿Qué opción de ls muestra los archivos ocultos?
+-- A) ls -l
+-- B) ls -a
+-- C) ls -h
+-- D) ls -o
+-- RESPUESTA: B
+-- EXPLICACION: ls -a (all) muestra todos los archivos incluyendo los que comienzan con punto
+
+-- PREGUNTA 5: ¿Cuál es el comando para crear un directorio?
+-- A) mkdir
+-- B) mkfolder
+-- C) newdir
+-- D) create
+-- RESPUESTA: A
+-- EXPLICACION: mkdir (make directory) crea un nuevo directorio
+
+-- PREGUNTA 6: ¿Qué comando elimina archivos?
+-- A) del archivo
+-- B) remove archivo
+-- C) rm archivo
+-- D) delete archivo
+-- RESPUESTA: C
+-- EXPLICACION: rm (remove) elimina archivos de forma permanente
+
+-- PREGUNTA 7: ¿Cómo se copia un archivo en Linux?
+-- A) copy origen destino
+-- B) cp origen destino
+-- C) duplicate origen destino
+-- D) clone origen destino
+-- RESPUESTA: B
+-- EXPLICACION: cp (copy) copia archivos o directorios
+
+-- PREGUNTA 8: ¿Qué comando muestra el contenido de un archivo?
+-- A) show archivo
+-- B) print archivo
+-- C) cat archivo
+-- D) view archivo
+-- RESPUESTA: C
+-- EXPLICACION: cat (concatenate) muestra el contenido de archivos
+
+-- PREGUNTA 9: ¿Cuál es el comando para cambiar permisos de archivos?
+-- A) perm
+-- B) chmod
+-- C) permission
+-- D) chperm
+-- RESPUESTA: B
+-- EXPLICACION: chmod (change mode) modifica los permisos de acceso
+
+-- PREGUNTA 10: ¿Qué significa el directorio especial '..'?
+-- A) Directorio actual
+-- B) Directorio raíz
+-- C) Directorio padre
+-- D) Directorio temporal
+-- RESPUESTA: C
+-- EXPLICACION: '..' representa el directorio padre en la jerarquía
+
+-- PREGUNTA 11: ¿Cuál es el comando para buscar archivos?
+-- A) search
+-- B) find
+-- C) grep
+-- D) locate
+-- RESPUESTA: B
+-- EXPLICACION: find busca archivos por nombre, tipo, fecha y otros criterios
+
+-- PREGUNTA 12: ¿Qué comando muestra quién eres en el sistema?
+-- A) whoami
+-- B) who_am_i
+-- C) identify
+-- D) username
+-- RESPUESTA: A
+-- EXPLICACION: whoami muestra el nombre del usuario actual
+
+-- PREGUNTA 13: ¿Cómo se mueven archivos en Linux?
+-- A) move origen destino
+-- B) mv origen destino
+-- C) shift origen destino
+-- D) transfer origen destino
+-- RESPUESTA: B
+-- EXPLICACION: mv (move) mueve o renombra archivos
+
+-- PREGUNTA 14: ¿Qué comando muestra el historial de comandos?
+-- A) history
+-- B) log
+-- C) previous
+-- D) commands
+-- RESPUESTA: A
+-- EXPLICACION: history muestra todos los comandos ejecutados recientemente
+
+-- PREGUNTA 15: ¿Cuál es el comando para buscar texto en archivos?
+-- A) search
+-- B) find
+-- C) grep
+-- D) scan
+-- RESPUESTA: C
+-- EXPLICACION: grep busca líneas que coincidan con un patrón en archivos
+
+-- PREGUNTA 16: ¿Qué opción de ls muestra el tamaño de archivos en MB/GB?
+-- A) ls -h
+-- B) ls -s
+-- C) ls -l
+-- D) ls -t
+-- RESPUESTA: A
+-- EXPLICACION: ls -h (human-readable) muestra tamaños en formato legible (KB, MB, GB)
+
+-- PREGUNTA 17: ¿Cómo se ejecuta un comando como superusuario?
+-- A) super comando
+-- B) sudo comando
+-- C) run comando
+-- D) admin comando
+-- RESPUESTA: B
+-- EXPLICACION: sudo (superuser do) ejecuta un comando con permisos de administrador
+
+-- PREGUNTA 18: ¿Qué comando limpia la pantalla de la terminal?
+-- A) clear
+-- B) cls
+-- C) wipe
+-- D) delete
+-- RESPUESTA: A
+-- EXPLICACION: clear limpia la pantalla de la terminal actual
+
+-- PREGUNTA 19: ¿Cuál es la ruta del directorio raíz en Linux?
+-- A) /home
+-- B) /
+-- C) /root
+-- D) /system
+-- RESPUESTA: B
+-- EXPLICACION: / es el directorio raíz del sistema de archivos
+
+-- PREGUNTA 20: ¿Qué comando muestra las variables de entorno?
+-- A) var
+-- B) env
+-- C) variables
+-- D) show_env
+-- RESPUESTA: B
+-- EXPLICACION: env muestra todas las variables de entorno del sistema

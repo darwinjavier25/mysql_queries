@@ -1,0 +1,161 @@
+-- QUIZ: Git - Ramas, conflictos y colaboración
+
+-- PREGUNTA 1: ¿Qué es un merge conflict?
+-- A) Un error de conexión al remoto
+-- B) Un cambio que Git no puede combinar automáticamente
+-- C) Un commit sin mensaje
+-- D) Una rama vacía
+-- RESPUESTA: B
+-- EXPLICACION: Ocurre cuando dos cambios afectan la misma parte y Git necesita decisión humana.
+
+-- PREGUNTA 2: ¿Qué debe hacerse después de resolver manualmente un conflicto?
+-- A) git init
+-- B) git add de los archivos resueltos
+-- C) borrar la carpeta .git
+-- D) git clone otra vez siempre
+-- RESPUESTA: B
+-- EXPLICACION: git add marca los conflictos como resueltos antes de completar el merge.
+
+-- PREGUNTA 3: ¿Qué comando cancela un merge en curso?
+-- A) git merge --abort
+-- B) git merge --stop
+-- C) git cancel merge
+-- D) git reset merge
+-- RESPUESTA: A
+-- EXPLICACION: --abort intenta volver al estado anterior al merge.
+
+-- PREGUNTA 4: ¿Qué comando reescribe commits locales encima de otra base?
+-- A) git merge
+-- B) git rebase
+-- C) git branch
+-- D) git stash
+-- RESPUESTA: B
+-- EXPLICACION: git rebase reaplica commits sobre otra referencia.
+
+-- PREGUNTA 5: ¿Cuándo conviene evitar rebase sobre commits ya compartidos?
+-- A) Nunca, siempre es obligatorio
+-- B) Cuando otros ya pueden depender de ese historial
+-- C) Solo en repositorios vacíos
+-- D) Cuando no hay remoto
+-- RESPUESTA: B
+-- EXPLICACION: Reescribir historial compartido puede complicar el trabajo de otras personas.
+
+-- PREGUNTA 6: ¿Qué comando guarda cambios temporalmente sin hacer commit?
+-- A) git stash
+-- B) git temp
+-- C) git pause
+-- D) git hold
+-- RESPUESTA: A
+-- EXPLICACION: git stash aparta cambios para recuperarlos más tarde.
+
+-- PREGUNTA 7: ¿Qué comando recupera el último stash y lo elimina de la lista?
+-- A) git stash apply
+-- B) git stash pop
+-- C) git stash get
+-- D) git stash restore
+-- RESPUESTA: B
+-- EXPLICACION: pop aplica el stash y lo quita si se aplica correctamente.
+
+-- PREGUNTA 8: ¿Qué comando muestra los stashes guardados?
+-- A) git stash list
+-- B) git list stash
+-- C) git stash show-all
+-- D) git saved
+-- RESPUESTA: A
+-- EXPLICACION: git stash list enumera los cambios guardados temporalmente.
+
+-- PREGUNTA 9: ¿Qué comando etiqueta un punto del historial?
+-- A) git mark
+-- B) git tag
+-- C) git label
+-- D) git point
+-- RESPUESTA: B
+-- EXPLICACION: git tag se usa normalmente para marcar versiones.
+
+-- PREGUNTA 10: ¿Qué comando elimina una rama local ya fusionada?
+-- A) git branch -d nombre
+-- B) git delete nombre
+-- C) git remove branch nombre
+-- D) git branch --remove-remote nombre
+-- RESPUESTA: A
+-- EXPLICACION: -d borra una rama local si Git considera seguro hacerlo.
+
+-- PREGUNTA 11: ¿Qué comando fuerza la eliminación de una rama local?
+-- A) git branch -D nombre
+-- B) git branch -F nombre
+-- C) git remove -f nombre
+-- D) git delete --hard nombre
+-- RESPUESTA: A
+-- EXPLICACION: -D fuerza el borrado aunque la rama no esté fusionada.
+
+-- PREGUNTA 12: ¿Qué comando restaura un archivo del último commit en Git moderno?
+-- A) git restore archivo
+-- B) git revert archivo
+-- C) git undo archivo
+-- D) git reset-file archivo
+-- RESPUESTA: A
+-- EXPLICACION: git restore descarta cambios del árbol de trabajo para ese archivo.
+
+-- PREGUNTA 13: ¿Qué comando quita un archivo del área preparada sin borrar sus cambios?
+-- A) git restore --staged archivo
+-- B) git remove --staged archivo
+-- C) git clean archivo
+-- D) git delete --cached archivo
+-- RESPUESTA: A
+-- EXPLICACION: restore --staged saca el archivo del staging.
+
+-- PREGUNTA 14: ¿Qué comando crea un nuevo commit que revierte otro commit?
+-- A) git reset
+-- B) git revert
+-- C) git delete
+-- D) git checkout
+-- RESPUESTA: B
+-- EXPLICACION: git revert no reescribe historial; añade un commit inverso.
+
+-- PREGUNTA 15: ¿Qué comando muestra quién modificó cada línea de un archivo?
+-- A) git blame archivo
+-- B) git author archivo
+-- C) git inspect archivo
+-- D) git line-log archivo
+-- RESPUESTA: A
+-- EXPLICACION: git blame muestra commit y autor por línea.
+
+-- PREGUNTA 16: ¿Qué comando elimina archivos no versionados del árbol de trabajo?
+-- A) git clean
+-- B) git sweep
+-- C) git purge
+-- D) git clear
+-- RESPUESTA: A
+-- EXPLICACION: git clean borra archivos no seguidos; debe usarse con cuidado.
+
+-- PREGUNTA 17: ¿Qué opción suele usarse para ver qué borraría git clean sin ejecutar el borrado?
+-- A) -n
+-- B) -x
+-- C) -p
+-- D) -m
+-- RESPUESTA: A
+-- EXPLICACION: git clean -n hace una simulación.
+
+-- PREGUNTA 18: ¿Qué es un Pull Request o Merge Request?
+-- A) Una petición para borrar el repositorio
+-- B) Una propuesta para revisar e integrar cambios
+-- C) Un comando local de Git
+-- D) Una copia de seguridad automática
+-- RESPUESTA: B
+-- EXPLICACION: Permite revisar cambios antes de fusionarlos en una rama principal.
+
+-- PREGUNTA 19: ¿Qué comando muestra un commit concreto?
+-- A) git show HASH
+-- B) git open HASH
+-- C) git commit HASH
+-- D) git see HASH
+-- RESPUESTA: A
+-- EXPLICACION: git show enseña detalles y diff de un commit u objeto.
+
+-- PREGUNTA 20: ¿Qué comando muestra un historial compacto en una línea por commit?
+-- A) git log --oneline
+-- B) git log --small
+-- C) git history --short
+-- D) git show --brief
+-- RESPUESTA: A
+-- EXPLICACION: --oneline resume cada commit en una línea.

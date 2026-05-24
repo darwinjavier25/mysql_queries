@@ -1,0 +1,161 @@
+-- QUIZ: Docker - Conceptos Fundamentales
+
+-- PREGUNTA 1: ¿Qué es un contenedor Docker?
+-- A) Una máquina virtual completa
+-- B) Una imagen ejecutable que contiene código y dependencias
+-- C) Un archivo de configuración
+-- D) Un servidor de base de datos
+-- RESPUESTA: B
+-- EXPLICACION: Un contenedor es una instancia ejecutable y ligera de una imagen Docker
+
+-- PREGUNTA 2: ¿Cuál es la diferencia entre una imagen y un contenedor?
+-- A) Son lo mismo
+-- B) La imagen es el molde, el contenedor es la instancia en ejecución
+-- C) El contenedor es el molde, la imagen es la instancia
+-- D) No existe relación entre ellos
+-- RESPUESTA: B
+-- EXPLICACION: Una imagen es una plantilla inmutable, un contenedor es una instancia mutable
+
+-- PREGUNTA 3: ¿Qué archivo define cómo construir una imagen Docker?
+-- A) docker.conf
+-- B) Dockerfile
+-- C) image.yml
+-- D) config.docker
+-- RESPUESTA: B
+-- EXPLICACION: Dockerfile contiene instrucciones para construir una imagen
+
+-- PREGUNTA 4: ¿Cuál es el comando para listar contenedores en ejecución?
+-- A) docker list
+-- B) docker ps
+-- C) docker show
+-- D) docker containers
+-- RESPUESTA: B
+-- EXPLICACION: docker ps lista los contenedores que están actualmente en ejecución
+
+-- PREGUNTA 5: ¿Qué comando inicia un contenedor desde una imagen?
+-- A) docker create
+-- B) docker start
+-- C) docker run
+-- D) docker execute
+-- RESPUESTA: C
+-- EXPLICACION: docker run crea y ejecuta un nuevo contenedor
+
+-- PREGUNTA 6: ¿Cuál es el propósito de Docker Compose?
+-- A) Compilar imágenes
+-- B) Definir y ejecutar aplicaciones multi-contenedor
+-- C) Hacer copias de seguridad
+-- D) Gestionar registros
+-- RESPUESTA: B
+-- EXPLICACION: Docker Compose permite definir aplicaciones complejas con múltiples servicios
+
+-- PREGUNTA 7: ¿Qué comando detiene un contenedor?
+-- A) docker stop id_contenedor
+-- B) docker kill id_contenedor
+-- C) docker pause id_contenedor
+-- D) docker end id_contenedor
+-- RESPUESTA: A
+-- EXPLICACION: docker stop detiene un contenedor de forma ordenada
+
+-- PREGUNTA 8: ¿Cuál es la instrucción en Dockerfile para establecer el directorio de trabajo?
+-- A) SET WORKDIR
+-- B) WORKDIR
+-- C) CHDIR
+-- D) CD
+-- RESPUESTA: B
+-- EXPLICACION: WORKDIR establece el directorio de trabajo en el contenedor
+
+-- PREGUNTA 9: ¿Qué comando elimina una imagen Docker?
+-- A) docker delete imagen
+-- B) docker remove imagen
+-- C) docker rmi imagen
+-- D) docker erase imagen
+-- RESPUESTA: C
+-- EXPLICACION: docker rmi (remove image) elimina una imagen
+
+-- PREGUNTA 10: ¿Qué instrucción copia archivos en un Dockerfile?
+-- A) ADD
+-- B) COPY
+-- C) Ambas (ADD y COPY)
+-- D) TRANSFER
+-- RESPUESTA: C
+-- EXPLICACION: COPY y ADD copian archivos, pero ADD también soporta URLs y descompresión
+
+-- PREGUNTA 11: ¿Cuál es el puerto por defecto que escucha Docker?
+-- A) 2375
+-- B) 2376
+-- C) 8080
+-- D) Docker no usa puertos fijos
+-- RESPUESTA: A
+-- EXPLICACION: Docker escucha por defecto en el socket Unix, pero puede usar el puerto TCP 2375
+
+-- PREGUNTA 12: ¿Qué comando accede a la consola de un contenedor en ejecución?
+-- A) docker bash id_contenedor
+-- B) docker shell id_contenedor
+-- C) docker exec -it id_contenedor /bin/bash
+-- D) docker console id_contenedor
+-- RESPUESTA: C
+-- EXPLICACION: docker exec permite ejecutar comandos en un contenedor en ejecución
+
+-- PREGUNTA 13: ¿Qué es un volumen en Docker?
+-- A) Una carpeta temporal
+-- B) Un mecanismo para persistir datos fuera del contenedor
+-- C) Un archivo de configuración
+-- D) Una conexión de red
+-- RESPUESTA: B
+-- EXPLICACION: Los volúmenes permiten compartir datos entre host y contenedor
+
+-- PREGUNTA 14: ¿Cuál es la instrucción para ejecutar un comando en Dockerfile?
+-- A) EXEC
+-- B) RUN
+-- C) COMMAND
+-- D) EXECUTE
+-- RESPUESTA: B
+-- EXPLICACION: RUN ejecuta comandos durante la construcción de la imagen
+
+-- PREGUNTA 15: ¿Qué comando muestra los logs de un contenedor?
+-- A) docker log id_contenedor
+-- B) docker logs id_contenedor
+-- C) docker show-logs id_contenedor
+-- D) docker error id_contenedor
+-- RESPUESTA: B
+-- EXPLICACION: docker logs muestra la salida del contenedor
+
+-- PREGUNTA 16: ¿Cuál es la función de docker-compose.yml?
+-- A) Definir variables de entorno
+-- B) Compilar imágenes
+-- C) Definir servicios y su configuración
+-- D) Hacer backup de contenedores
+-- RESPUESTA: C
+-- EXPLICACION: docker-compose.yml define la configuración de múltiples servicios
+
+-- PREGUNTA 17: ¿Qué comando construye una imagen desde un Dockerfile?
+-- A) docker make
+-- B) docker build
+-- C) docker create-image
+-- D) docker construct
+-- RESPUESTA: B
+-- EXPLICACION: docker build construye una imagen a partir de un Dockerfile
+
+-- PREGUNTA 18: ¿Cuál es el nombre del usuario predeterminado en contenedores Linux?
+-- A) admin
+-- B) root
+-- C) user
+-- D) docker
+-- RESPUESTA: B
+-- EXPLICACION: Los contenedores generalmente corren como root por defecto
+
+-- PREGUNTA 19: ¿Qué es un registro Docker (Docker Registry)?
+-- A) Un archivo de configuración
+-- B) Un repositorio de imágenes Docker
+-- C) Un contenedor especial
+-- D) Una herramienta de monitoreo
+-- RESPUESTA: B
+-- EXPLICACION: Docker Hub es el registro público más popular de imágenes Docker
+
+-- PREGUNTA 20: ¿Cómo se mapean puertos entre host y contenedor?
+-- A) docker run -p HOST:CONTAINER imagen
+-- B) docker run -port HOST:CONTAINER imagen
+-- C) docker run -expose HOST:CONTAINER imagen
+-- D) docker run -link HOST:CONTAINER imagen
+-- RESPUESTA: A
+-- EXPLICACION: -p HOST_PORT:CONTAINER_PORT mapea puertos entre host y contenedor

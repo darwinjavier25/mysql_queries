@@ -1,0 +1,4 @@
+-- TEST 5: Consulta básica SQL
+-- PREGUNTA: Escribe una consulta SQL para seleccionar todas las columnas de una tabla llamada alumnos.
+-- RESPUESTA: SELECT * FROM alumnos;
+-- HINT: Usa SELECT, el comodín de todas las columnas y FROM.
