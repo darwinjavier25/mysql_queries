@@ -99,7 +99,7 @@
                                         <button class="btn btn-lg btn-outline-info w-100 p-4 lab-btn" data-lab="docker">
                                             <i class="fas fa-cube fa-2x mb-2"></i><br>
                                             <strong>Docker</strong><br>
-                                            <small class="text-muted">Próximamente</small>
+                                            <small class="text-muted">Imagenes, registro y comandos locales</small>
                                         </button>
                                     </div>
                                     <div class="col-md-6 mb-3">
@@ -253,6 +253,80 @@
                                 </div>
                             </div>
 
+                            <div id="dockerLabView" style="display: none;">
+                                <button class="btn btn-secondary btn-sm mb-3" id="backFromDockerLabBtn"><i class="fas fa-arrow-left me-1"></i>Volver a entornos</button>
+                                <div class="row g-3">
+                                    <div class="col-xl-8 col-lg-7">
+                                        <div class="lab-card bg-dark text-white">
+                                            <div class="p-3 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h5 class="mb-0">Docker local</h5>
+                                                    <small class="text-white-50">Simulador de imagenes con consulta local segura</small>
+                                                </div>
+                                                <button class="btn btn-outline-light btn-sm" id="resetDockerLabBtn"><i class="fas fa-redo me-1"></i>Reiniciar</button>
+                                            </div>
+                                            <div class="p-3">
+                                                <div id="dockerTerminal" class="console-output mb-3">
+                                                    <div id="dockerHistory"></div>
+                                                    <div class="terminal-input-line">
+                                                        <span class="console-prompt" id="dockerPrompt">docker@curso:~$</span>
+                                                        <input id="dockerCommandInput" class="terminal-input" placeholder="docker pull nginx:latest" autocomplete="off" spellcheck="false">
+                                                    </div>
+                                                </div>
+                                                <div class="row g-2">
+                                                    <div class="col-sm-4">
+                                                        <div class="border border-secondary rounded p-2">
+                                                            <small class="text-white-50">Imagenes</small><br>
+                                                            <strong class="git-blue" id="dockerImageCount">0</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="border border-secondary rounded p-2">
+                                                            <small class="text-white-50">Contenedores</small><br>
+                                                            <strong class="git-green" id="dockerContainerCount">0</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="border border-secondary rounded p-2">
+                                                            <small class="text-white-50">Registro</small><br>
+                                                            <strong class="git-yellow" id="dockerRegistryCount">0</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-5">
+                                        <div class="remote-panel p-3">
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div>
+                                                    <h5 class="mb-0">Registro simulado</h5>
+                                                    <small class="text-muted">Push y pull sin publicar nada real</small>
+                                                </div>
+                                                <span class="badge bg-info text-dark">Docker</span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <h6 class="mb-2">Imagenes publicadas</h6>
+                                                <div id="dockerRegistryImages"><span class="text-muted small">Usa docker push para publicar una etiqueta simulada.</span></div>
+                                            </div>
+                                            <hr>
+                                            <h6 class="mb-2">Ejemplos Docker</h6>
+                                            <div class="list-group mb-3" id="dockerExamples">
+                                                <button class="list-group-item list-group-item-action example-command" data-command="docker pull nginx:latest"><code>docker pull nginx:latest</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="docker images"><code>docker images</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="docker tag nginx:latest alumno/nginx:v1"><code>docker tag nginx:latest alumno/nginx:v1</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="docker push alumno/nginx:v1"><code>docker push alumno/nginx:v1</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="docker run --name web -p 8080:80 nginx:latest"><code>docker run --name web -p 8080:80 nginx:latest</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="docker ps"><code>docker ps</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="docker stop web"><code>docker stop web</code></button>
+                                                <button class="list-group-item list-group-item-action example-command" data-command="local docker version"><code>local docker version</code></button>
+                                            </div>
+                                            <p class="text-muted small mb-0">Usa el prefijo <code>local</code> para consultar Docker instalado: <code>local docker ps</code>, <code>local docker images</code>, <code>local docker info</code>.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div id="labPlaceholderView" style="display: none;">
                                 <button class="btn btn-secondary btn-sm mb-3" id="backFromPlaceholderBtn"><i class="fas fa-arrow-left me-1"></i>Volver a entornos</button>
                                 <div class="alert alert-info mb-0" id="labPlaceholderText"></div>
@@ -358,6 +432,14 @@ const linuxState = {
     cwd: '/home/alumno',
     entries: new Map(),
     packages: new Set(['bash', 'coreutils']),
+    commandHistory: [],
+    historyIndex: 0
+};
+
+const dockerState = {
+    images: new Map(),
+    containers: [],
+    registryImages: new Set(),
     commandHistory: [],
     historyIndex: 0
 };
@@ -912,6 +994,217 @@ function runGitCommand() {
     scrollGitTerminalToBottom();
 }
 
+function normalizeDockerImage(image) {
+    if (!image) return '';
+    return image.includes(':') ? image : `${image}:latest`;
+}
+
+function splitDockerImage(image) {
+    const normalized = normalizeDockerImage(image);
+    const slashIndex = normalized.lastIndexOf('/');
+    const colonIndex = normalized.lastIndexOf(':');
+    const name = colonIndex > slashIndex ? normalized.slice(0, colonIndex) : normalized;
+    const tag = colonIndex > slashIndex ? normalized.slice(colonIndex + 1) : 'latest';
+    return { name, tag, full: `${name}:${tag}` };
+}
+
+function dockerImageId(image) {
+    let hash = 0;
+    for (let i = 0; i < image.length; i++) {
+        hash = ((hash << 5) - hash) + image.charCodeAt(i);
+        hash |= 0;
+    }
+    return `sha256:${Math.abs(hash).toString(16).padStart(12, '0').slice(0, 12)}`;
+}
+
+function resetDockerState() {
+    dockerState.images = new Map([
+        ['hello-world:latest', { id: dockerImageId('hello-world:latest'), size: '13.3kB', source: 'local' }]
+    ]);
+    dockerState.containers = [];
+    dockerState.registryImages = new Set();
+    dockerState.commandHistory = [];
+    dockerState.historyIndex = 0;
+    document.getElementById('dockerHistory').innerHTML = '';
+    document.getElementById('dockerCommandInput').value = '';
+    appendConsoleOutput('dockerHistory', 'Laboratorio Docker preparado. Empieza con: docker pull nginx:latest');
+    updateDockerStats();
+    renderDockerRegistry();
+    scrollDockerTerminalToBottom();
+}
+
+function scrollDockerTerminalToBottom() {
+    const terminal = document.getElementById('dockerTerminal');
+    if (terminal) terminal.scrollTop = terminal.scrollHeight;
+}
+
+function updateDockerStats() {
+    document.getElementById('dockerImageCount').textContent = dockerState.images.size;
+    document.getElementById('dockerContainerCount').textContent = dockerState.containers.length;
+    document.getElementById('dockerRegistryCount').textContent = dockerState.registryImages.size;
+}
+
+function renderDockerRegistry() {
+    const images = [...dockerState.registryImages].sort();
+    document.getElementById('dockerRegistryImages').innerHTML = images.length
+        ? images.map(image => `<span class="file-chip">${escapeHtml(image)}</span>`).join('')
+        : '<span class="text-muted small">Usa docker push para publicar una etiqueta simulada.</span>';
+}
+
+function formatDockerImages(images=[...dockerState.images.entries()]) {
+    if (!images.length) return 'REPOSITORY          TAG       IMAGE ID       SIZE';
+    const rows = images.map(([full, meta]) => {
+        const parsed = splitDockerImage(full);
+        return `${parsed.name.padEnd(19)} ${parsed.tag.padEnd(9)} ${meta.id.replace('sha256:', '').padEnd(14)} ${meta.size}`;
+    });
+    return ['REPOSITORY          TAG       IMAGE ID       SIZE', ...rows].join('\n');
+}
+
+function formatDockerContainers(all=false) {
+    const containers = all ? dockerState.containers : dockerState.containers.filter(container => container.status === 'running');
+    if (!containers.length) return 'CONTAINER ID   IMAGE     COMMAND   STATUS    NAMES';
+    const rows = containers.map(container => {
+        return `${container.id.padEnd(14)} ${container.image.padEnd(17)} "${container.command}"   ${container.status.padEnd(9)} ${container.name}`;
+    });
+    return ['CONTAINER ID   IMAGE             COMMAND   STATUS    NAMES', ...rows].join('\n');
+}
+
+function runDockerSimulation(command) {
+    const parts = parseCommand(command);
+    const base = parts[0];
+    if (!base) return '';
+
+    if (base === 'help') {
+        return 'Comandos: docker pull, images, image ls, tag, push, build -t, run --name, ps, ps -a, stop, rm, rmi, inspect, login, logout, clear, history. Prefijo local para ejecutar consultas reales seguras.';
+    }
+    if (base === 'clear') {
+        document.getElementById('dockerHistory').innerHTML = '';
+        return '';
+    }
+    if (base === 'history') {
+        return dockerState.commandHistory.map((cmd, index) => `${index + 1}  ${cmd}`).join('\n');
+    }
+    if (base !== 'docker') {
+        return `Comando no reconocido en este simulador: ${base}`;
+    }
+
+    const sub = parts[1];
+    if (sub === 'pull') {
+        const image = normalizeDockerImage(parts[2]);
+        if (!image) return 'docker pull: falta el nombre de la imagen';
+        dockerState.images.set(image, { id: dockerImageId(image), size: image.includes('alpine') ? '7.8MB' : image.includes('nginx') ? '192MB' : '85MB', source: 'registry' });
+        return `Using default tag: ${splitDockerImage(image).tag}\n${image}: Pull complete\nDigest: ${dockerImageId(image)}\nStatus: Downloaded newer image for ${image}`;
+    }
+    if (sub === 'images' || (sub === 'image' && parts[2] === 'ls')) {
+        return formatDockerImages();
+    }
+    if (sub === 'tag') {
+        const source = normalizeDockerImage(parts[2]);
+        const target = normalizeDockerImage(parts[3]);
+        if (!source || !target) return 'uso: docker tag <imagen_origen> <imagen_destino>';
+        const meta = dockerState.images.get(source);
+        if (!meta) return `Error response from daemon: No such image: ${source}`;
+        dockerState.images.set(target, { ...meta, source: 'tagged' });
+        return `Etiqueta creada: ${target}`;
+    }
+    if (sub === 'push') {
+        const image = normalizeDockerImage(parts[2]);
+        if (!image) return 'docker push: falta el nombre de la imagen';
+        if (!dockerState.images.has(image)) return `An image does not exist locally with the tag: ${image}`;
+        dockerState.registryImages.add(image);
+        renderDockerRegistry();
+        return `The push refers to repository [registry.local/${splitDockerImage(image).name}]\n${dockerImageId(image).slice(7, 19)}: Pushed\n${splitDockerImage(image).tag}: digest: ${dockerImageId(image)} size: 742`;
+    }
+    if (sub === 'build') {
+        const tagIndex = parts.indexOf('-t');
+        const tag = tagIndex >= 0 ? normalizeDockerImage(parts[tagIndex + 1]) : '';
+        if (!tag) return 'uso: docker build -t <imagen:tag> .';
+        dockerState.images.set(tag, { id: dockerImageId(tag), size: '64MB', source: 'build' });
+        return `Sending build context to Docker daemon  4.096kB\nStep 1/3 : FROM alpine\nSuccessfully built ${dockerImageId(tag).replace('sha256:', '')}\nSuccessfully tagged ${tag}`;
+    }
+    if (sub === 'run') {
+        const nameIndex = parts.indexOf('--name');
+        const name = nameIndex >= 0 ? parts[nameIndex + 1] : `container-${dockerState.containers.length + 1}`;
+        const image = normalizeDockerImage(parts[parts.length - 1]);
+        if (!dockerState.images.has(image)) return `Unable to find image '${image}' locally. Prueba: docker pull ${image}`;
+        const id = Math.random().toString(16).slice(2, 14);
+        dockerState.containers.push({ id, image, name, command: '/docker-entrypoint.sh', status: 'running' });
+        return id;
+    }
+    if (sub === 'ps' || (sub === 'container' && parts[2] === 'ls')) {
+        return formatDockerContainers(parts.includes('-a') || parts.includes('--all'));
+    }
+    if (sub === 'stop') {
+        const name = parts[2];
+        const container = dockerState.containers.find(item => item.name === name || item.id.startsWith(name || ''));
+        if (!container) return `Error response from daemon: No such container: ${name || ''}`;
+        container.status = 'exited';
+        return container.name;
+    }
+    if (sub === 'rm') {
+        const name = parts[2];
+        const index = dockerState.containers.findIndex(item => item.name === name || item.id.startsWith(name || ''));
+        if (index < 0) return `Error response from daemon: No such container: ${name || ''}`;
+        if (dockerState.containers[index].status === 'running') return `Error response from daemon: You cannot remove a running container ${name}. Stop it first.`;
+        const [removed] = dockerState.containers.splice(index, 1);
+        return removed.name;
+    }
+    if (sub === 'rmi') {
+        const image = normalizeDockerImage(parts[2]);
+        if (!dockerState.images.has(image)) return `Error response from daemon: No such image: ${image}`;
+        dockerState.images.delete(image);
+        return `Untagged: ${image}\nDeleted: ${dockerImageId(image)}`;
+    }
+    if (sub === 'inspect') {
+        const target = normalizeDockerImage(parts[2]);
+        const image = dockerState.images.get(target);
+        if (!image) return `[]\nError: No such object: ${parts[2] || ''}`;
+        return JSON.stringify([{ Id: image.id, RepoTags: [target], Size: image.size, Source: image.source }], null, 2);
+    }
+    if (sub === 'login') return 'Login Succeeded (simulado)';
+    if (sub === 'logout') return 'Removing login credentials for registry.local (simulado)';
+
+    return `docker: subcomando no soportado todavia: ${sub || ''}`;
+}
+
+async function runLocalDockerCommand(command) {
+    const localCommand = command.replace(/^local\s+/, '').trim();
+    const res = await fetch('/entornos/api/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ command: localCommand })
+    });
+    const data = await res.json();
+    if (!data.success) return { text: data.error || 'No se pudo ejecutar el comando local.', isError: true };
+    const output = [data.stdout, data.stderr].filter(Boolean).join('\n').trim();
+    return {
+        text: output || `Comando finalizado con codigo ${data.returncode}`,
+        isError: data.returncode !== 0
+    };
+}
+
+async function runDockerCommand() {
+    const input = document.getElementById('dockerCommandInput');
+    const cmd = input.value.trim();
+    if (!cmd) return;
+    dockerState.commandHistory.push(cmd);
+    dockerState.historyIndex = dockerState.commandHistory.length;
+    appendConsoleOutput('dockerHistory', `${document.getElementById('dockerPrompt').textContent} ${cmd}`);
+    input.value = '';
+
+    if (cmd.startsWith('local docker ')) {
+        appendConsoleOutput('dockerHistory', 'Ejecutando comando Docker local permitido...');
+        const result = await runLocalDockerCommand(cmd);
+        appendConsoleOutput('dockerHistory', result.text, result.isError);
+    } else {
+        const result = runDockerSimulation(cmd);
+        if (result) appendConsoleOutput('dockerHistory', result, result.startsWith('Error') || result.includes('No such') || result.includes('no soportado') || result.includes('no reconocido'));
+    }
+
+    updateDockerStats();
+    scrollDockerTerminalToBottom();
+}
+
 document.querySelectorAll('.lab-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         const lab = this.getAttribute('data-lab');
@@ -919,6 +1212,7 @@ document.querySelectorAll('.lab-btn').forEach(btn => {
         if (lab === 'linux') {
             document.getElementById('linuxLabView').style.display = 'block';
             document.getElementById('gitLabView').style.display = 'none';
+            document.getElementById('dockerLabView').style.display = 'none';
             document.getElementById('labPlaceholderView').style.display = 'none';
             if (!document.getElementById('linuxHistory').children.length) resetLinuxState();
             document.getElementById('linuxCommandInput').focus();
@@ -927,13 +1221,24 @@ document.querySelectorAll('.lab-btn').forEach(btn => {
         if (lab === 'git') {
             document.getElementById('linuxLabView').style.display = 'none';
             document.getElementById('gitLabView').style.display = 'block';
+            document.getElementById('dockerLabView').style.display = 'none';
             document.getElementById('labPlaceholderView').style.display = 'none';
             if (!document.getElementById('gitHistory').children.length) resetGitState();
             document.getElementById('gitCommandInput').focus();
             return;
         }
+        if (lab === 'docker') {
+            document.getElementById('linuxLabView').style.display = 'none';
+            document.getElementById('gitLabView').style.display = 'none';
+            document.getElementById('dockerLabView').style.display = 'block';
+            document.getElementById('labPlaceholderView').style.display = 'none';
+            if (!document.getElementById('dockerHistory').children.length) resetDockerState();
+            document.getElementById('dockerCommandInput').focus();
+            return;
+        }
         document.getElementById('linuxLabView').style.display = 'none';
         document.getElementById('gitLabView').style.display = 'none';
+        document.getElementById('dockerLabView').style.display = 'none';
         document.getElementById('labPlaceholderView').style.display = 'block';
         document.getElementById('labPlaceholderText').textContent = `El laboratorio de ${this.querySelector('strong').textContent} se añadirá en la siguiente iteración.`;
     });
@@ -949,6 +1254,11 @@ document.getElementById('backFromGitLabBtn').addEventListener('click', () => {
     document.getElementById('labCategoryView').style.display = 'block';
 });
 
+document.getElementById('backFromDockerLabBtn').addEventListener('click', () => {
+    document.getElementById('dockerLabView').style.display = 'none';
+    document.getElementById('labCategoryView').style.display = 'block';
+});
+
 document.getElementById('backFromPlaceholderBtn').addEventListener('click', () => {
     document.getElementById('labPlaceholderView').style.display = 'none';
     document.getElementById('labCategoryView').style.display = 'block';
@@ -956,16 +1266,26 @@ document.getElementById('backFromPlaceholderBtn').addEventListener('click', () =
 
 document.getElementById('resetLinuxLabBtn').addEventListener('click', resetLinuxState);
 document.getElementById('resetGitLabBtn').addEventListener('click', resetGitState);
+document.getElementById('resetDockerLabBtn').addEventListener('click', resetDockerState);
 document.getElementById('linuxTerminal').addEventListener('click', () => {
     document.getElementById('linuxCommandInput').focus();
 });
 document.getElementById('gitTerminal').addEventListener('click', () => {
     document.getElementById('gitCommandInput').focus();
 });
+document.getElementById('dockerTerminal').addEventListener('click', () => {
+    document.getElementById('dockerCommandInput').focus();
+});
 document.querySelectorAll('#linuxExamples .example-command').forEach(btn => {
     btn.addEventListener('click', function() {
         document.getElementById('linuxCommandInput').value = this.getAttribute('data-command');
         document.getElementById('linuxCommandInput').focus();
+    });
+});
+document.querySelectorAll('#dockerExamples .example-command').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.getElementById('dockerCommandInput').value = this.getAttribute('data-command');
+        document.getElementById('dockerCommandInput').focus();
     });
 });
 document.getElementById('linuxCommandInput').addEventListener('keydown', (event) => {
@@ -1002,6 +1322,24 @@ document.getElementById('gitCommandInput').addEventListener('keydown', (event) =
         if (!gitState.commandHistory.length) return;
         gitState.historyIndex = Math.min(gitState.commandHistory.length, gitState.historyIndex + 1);
         event.target.value = gitState.commandHistory[gitState.historyIndex] || '';
+    }
+});
+document.getElementById('dockerCommandInput').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        runDockerCommand();
+        return;
+    }
+    if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (!dockerState.commandHistory.length) return;
+        dockerState.historyIndex = Math.max(0, dockerState.historyIndex - 1);
+        event.target.value = dockerState.commandHistory[dockerState.historyIndex] || '';
+    }
+    if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        if (!dockerState.commandHistory.length) return;
+        dockerState.historyIndex = Math.min(dockerState.commandHistory.length, dockerState.historyIndex + 1);
+        event.target.value = dockerState.commandHistory[dockerState.historyIndex] || '';
     }
 });
 

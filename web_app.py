@@ -480,9 +480,9 @@ def _safe_execute_command(command, timeout=5):
             'status', 'log', 'branch', 'rev-parse', 'show', 'remote', 'ls-remote', 'tag',
             'describe', 'diff', 'shortlog', 'help'
         ],
-        # docker: allow common inspect/info commands (no run/exec)
+        # docker: allow common read-only inspect/info commands (no run/exec/pull/push)
         'docker': [
-            'ps', 'images', 'inspect', 'version', 'info', 'stats'
+            'ps', 'images', 'inspect', 'version', 'info', 'stats', 'image', 'container', 'system'
         ]
     }
 
@@ -505,6 +505,19 @@ def _safe_execute_command(command, timeout=5):
                 pass
             elif sub not in allowed_subs:
                 return {"success": False, "error": f"Subcomando no permitido para {base}: {sub}"}
+
+        if base == 'docker':
+            allowed_nested = {
+                'image': {'ls', 'inspect'},
+                'container': {'ls', 'inspect'},
+                'system': {'df', 'info'},
+            }
+            if len(parts) > 2 and parts[1] in allowed_nested:
+                nested = parts[2]
+                if nested.startswith('-'):
+                    pass
+                elif nested not in allowed_nested[parts[1]]:
+                    return {"success": False, "error": f"Subcomando no permitido para docker {parts[1]}: {nested}"}
 
         # Limit tokens to avoid long pipelines
         if len(parts) > 10:
