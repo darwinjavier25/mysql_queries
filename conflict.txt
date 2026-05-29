@@ -1,2 +1,3 @@
 mi commit desde main
 mi conflicto no resuelto
+mi tercer conflicto desde feature
