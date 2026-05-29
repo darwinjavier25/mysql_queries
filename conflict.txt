@@ -1,2 +1,2 @@
-este es mi conflicto desde feature
-mi conflicto desde mi rama
+mi commit desde main
+mi conflicto para kathy
