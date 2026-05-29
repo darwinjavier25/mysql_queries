@@ -1,2 +1,3 @@
 mi commit desde main
 mi conflicto para kathy2
+mi tercer conflicto desde main
