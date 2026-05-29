@@ -1,2 +1,2 @@
 mi commit desde main
-mi conflicto desde feature
+mi conflicto no resuelto
