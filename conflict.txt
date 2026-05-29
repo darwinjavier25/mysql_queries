@@ -1,2 +1,2 @@
 mi commit desde main
-mi conflicto para kathy
+mi conflicto desde feature
